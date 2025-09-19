@@ -39,7 +39,7 @@ As telas foram desenhadas no Figma e servirão como base para o desenvolvimento:
 ## Como rodar (em breve)
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/beresnice/pokedex-lual.git
+   git clone https://github.com/Lual-Tech/pokedex-lual.git
 
 --- 
 
@@ -82,7 +82,7 @@ The screens were designed in Figma and will serve as the foundation for developm
 ## ⚡ How to Run (coming soon)
 1. Clone the repository:
    ```bash
-   git clone https://github.com/beresnice/pokedex-lual.git
+   git clone https://github.com/Lual-Tech/pokedex-lual.git
 
 ---
 Aldryn & Luma
