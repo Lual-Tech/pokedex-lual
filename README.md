@@ -79,7 +79,7 @@ The screens were designed in Figma and will serve as the foundation for developm
 
 ---
 
-## ⚡ How to Run (coming soon)
+## How to Run (coming soon)
 1. Clone the repository:
    ```bash
    git clone https://github.com/Lual-Tech/pokedex-lual.git
