@@ -1,6 +1,5 @@
 # 📱 Pokédex Lual
-
-![Preview da Pokédex](https://i.pinimg.com/564x/8b/f0/87/8bf087e35a7cfcfb641f9562ea6b6e87.jpg)
+<iframe src="https://assets.pinterest.com/ext/embed.html?id=13440498883615534" height="433" width="450" frameborder="0" scrolling="no" ></iframe>
 
 ---
 
