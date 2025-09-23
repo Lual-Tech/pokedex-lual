@@ -3,8 +3,8 @@
 const squirtle = {
   id: 7,
   name: "squirtle",
-  height: 5, // altura em decímetros (0.5m)
-  weight: 90, // peso em hectogramas (9.0kg)
+  height: 5, // altura 0.5m
+  weight: 90, // peso 9.0kg
   types: [
     { slot: 1, type: { name: "water", url: "https://pokeapi.co/api/v2/type/11/" } }
   ],
