@@ -1,18 +1,23 @@
-const loginForm = document.getElementById("loginForm");
 
-loginForm.addEventListener("submit", function(event) {
-  event.preventDefault();
 
-  const email = document.getElementById("email").value;
-  const senha = document.getElementById("password").value;
-
-  const emailCorreto = "teste@pokedex.com";
-  const senhaCorreta = "1234";
-
-  if (email === emailCorreto && senha === senhaCorreta) {
-    alert("Login realizado com sucesso!");
-    window.location.href = "index.html";
-  } else {
-    alert(" Usuário ou senha incorretos!");
+const dadosLogin = {
+  usuarios: [
+    {
+      id: 1,
+      nome: "Misty",
+      email: "misty@pokedex.com",
+      senha: "abcd"
+    }
+  ],
+  opcoesLoginExterno: [
+    { id: "google", nome: "Continuar com o Google" },
+    { id: "apple", nome: "Continuar com o Apple ID" }
+  ],
+  mensagens: {
+    loginSucesso: "Login realizado com sucesso!",
+    loginErro: "Usuário ou senha incorretos!",
+    esqueciSenha: "Esqueceu a senha?",
+    cadastrar: "Não possui uma conta? Cadastre-se agora"
   }
-});
+};
+
