@@ -3,6 +3,8 @@
 const squirtle = {
   id: 7,
   name: "squirtle",
+  height: 5 ; // 5 mm   
+  weight: 90, // peso 9.0 gramas 
   height: 5, // altura 0.5m
   weight: 90, // peso 9.0kg
   types: [
@@ -24,3 +26,4 @@ const squirtle = {
     front_default: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png"
   }
 };
+
