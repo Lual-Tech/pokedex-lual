@@ -1,148 +1,75 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Home • Pokédex Lual</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    /* Gradientes pedidos */
-    --rosagrad: radial-gradient(#FFE0EE, #F6B4D1);
-    --verdegrad: radial-gradient(#9efed0, #038e00);
-    --azulgrad: radial-gradient(#c0f6fa, #03a4e8);
-    --amagrad: radial-gradient(#FFD882, #CF8E00);
-    --largrad: radial-gradient(#FDE9A9, #D53E1B);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home • Pokédex Lual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --rosagrad: radial-gradient(#FFE0EE, #F6B4D1);
+      --verdegrad: radial-gradient(#9efed0, #038e00);
+      --azulgrad: radial-gradient(#c0f6fa, #03a4e8);
+      --amagrad: radial-gradient(#FFD882, #CF8E00);
+      --largrad: radial-gradient(#FDE9A9, #D53E1B);
+      --panel: rgba(255,255,255,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font:600 clamp(14px,1.6vw,18px)/1.35 "Poppins", system-ui; color:#07363e; overflow-x:hidden}
 
-    /* Dock e UI */
-    --panel: rgba(255,255,255,0.08); /* transparência estilo vidro */ /* fundo do dock */
-    --stroke:#ffffff22;
-    --text:#ebffff;
-    --muted:#d7ffffcc;
-    --cta:#c8f4f7;
-    --cta-shadow:#1aa1b5aa;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    font:600 clamp(14px,1.6vw,18px)/1.35 "Poppins", Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
-    color:#07363e;
-    overflow-x:hidden;
-  }
+    .bg{position:fixed; inset:0; z-index:-1}
+    .bg .layer{position:absolute; inset:0; opacity:0; transition:opacity .9s ease; background:var(--azulgrad)}
+    .bg .layer.show{opacity:1}
 
-  /* ====== BACKGROUND crossfade ====== */
-  .bg{position:fixed; inset:0; z-index:-1;}
-  .bg .layer{position:absolute; inset:0; opacity:0; transition:opacity .9s ease; background:var(--azulgrad);}
-  .bg .layer.show{opacity:1}
+    .page{min-height:100dvh; display:grid; grid-template-rows:1fr auto}
+    .hero{display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:min(5vw,64px);
+          padding:clamp(20px,6vw,72px); padding-bottom:140px; position:relative}
+    .left{max-width:720px}
+    .hi{display:flex; align-items:center; gap:12px}
+    .hi .avatar{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-size:22px; background:#ffffff88}
+    h1{margin:.2em 0 .4em; font-size:clamp(28px,4.4vw,56px); color:#fff}
+    p.lead{margin:0 0 22px; color:#ecffff; font-weight:500}
+    .cta{all:unset; display:inline-grid; place-items:center; padding:14px 26px; border-radius:999px; cursor:pointer; color:#fff; font-weight:700;
+         background:rgba(255,255,255,0.18); border:1px solid #ffffff40; backdrop-filter:blur(10px) saturate(120%)}
 
-  /* ====== LAYOUT ====== */
-  .page{min-height:100dvh; display:grid; grid-template-rows:1fr auto;}
-  .hero{display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:min(5vw,64px); padding: clamp(20px, 6vw, 72px); padding-bottom: 140px; position:relative;}
+    .right{position:relative; min-height:360px}
+    .pokemon{position:relative; width:min(540px, 40vw); aspect-ratio:1/1; margin-inline:auto; filter:drop-shadow(0 38px 40px #08839d66)}
+    .poke{position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-position:center; opacity:0; transition:opacity .9s ease, transform 1.8s ease}
+    .poke.show{opacity:1} .poke.float{animation:float 4.2s ease-in-out infinite}
+    @keyframes float{0%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}100%{transform:translateY(0) rotate(-1deg)}}
 
-  /* ====== BROWSE (lista) ====== */
-  .browse{display:grid; grid-template-rows:auto 1fr; gap:28px; padding-bottom:140px}
-  .browse[hidden]{display:none}
-  .browse .hero-bar{position:relative; padding:28px clamp(16px,4vw,48px); border-radius:18px; color:#fff; overflow:hidden; background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25));}
-  .browse .hero-bar:before{content:""; position:absolute; inset:-20% -10% auto -10%; height:200%; background:var(--amagrad); z-index:-2}
-  .browse .hero-bar:after{content:""; position:absolute; right:-10%; top:-20%; width:60%; height:200%; background:url('https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu-hero.webp') center/contain no-repeat; opacity:.9; z-index:-1}
-  .browse h2{margin:0 0 18px; font-size:clamp(24px,3.6vw,44px)}
-  .toolbar{display:flex; gap:12px; align-items:center}
-  .search{flex:1; display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:999px; background:rgba(255,255,255,.18); border:1px solid #ffffff55; color:#fff;}
-  .chip, .filter-btn{all:unset; display:inline-grid; place-items:center; padding:10px 16px; border-radius:999px; background:rgba(255,255,255,.18); border:1px solid #ffffff55; color:#fff; cursor:pointer}
-  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:22px; padding:0 clamp(16px,4vw,48px)}
-  .card{position:relative; border-radius:18px; padding:16px; background:#0e0f10; color:#fff; box-shadow:0 10px 18px rgba(0,0,0,.35); overflow:hidden}
-  .card .thumb{height:160px; border-radius:14px; background:var(--azulgrad); display:grid; place-items:center;}
-  .card .thumb img{width:78%; height:auto; filter:drop-shadow(0 16px 22px rgba(0,0,0,.4))}
-  .card .meta{display:flex; justify-content:space-between; align-items:center; margin-top:10px; opacity:.9}
-  .pill{position:absolute; right:16px; bottom:16px; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.18); border:1px solid #ffffff55}
+    /* Dock */
+    .dock-wrap{position:sticky; bottom:18px; display:grid; place-items:center; margin-top:-80px}
+    .dock{width:min(680px,92vw); height:78px; border-radius:999px; background:var(--panel);
+          backdrop-filter:blur(16px) saturate(120%); border:1px solid #ffffff2a; box-shadow:0 18px 32px #00000055, inset 0 1px 0 #ffffff1a;
+          display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:28px; padding:12px 28px; position:relative; overflow:visible}
+    .tab{all:unset; display:grid; place-items:center; gap:6px; cursor:pointer; text-align:center}
+    .tab svg{width:22px; height:22px; stroke:#e5e7eb88; fill:none}
+    .tab span{font-size:12px; color:#e5e7ebaa; line-height:1; transform:translateY(-2px)}
+    .center{position:relative; display:grid; place-items:center; justify-self:center; gap:6px; padding-top:46px}
+    .pokeball-wrap{position:absolute; top:-6px; left:50%; transform:translate(-50%,-58%); z-index:3; pointer-events:auto}
+    .pokeball{width:96px; height:96px; border-radius:50%; position:relative; overflow:hidden; background:#fff; border:1px solid #fff; box-shadow:0 14px 24px rgba(0,0,0,.28)}
+    .pokeball .top{position:absolute; inset:0; background:radial-gradient(120px 120px at 50% -12px, rgba(255,34,51,.95), rgba(197,7,18,.85) 60%); clip-path:inset(0 0 48% 0)}
+    .pokeball .band{position:absolute; top:48%; left:-8%; right:-8%; height:16%; background:rgba(17,17,17,.5)}
+    .pokeball .btn{position:absolute; inset:0; margin:auto; width:32px; height:32px; border-radius:50%; background:linear-gradient(#fff,#e3e6e9); border:3px solid rgba(17,17,17,.55); top:48%; transform:translateY(-50%)}
+    .center label{font-size:12px; color:#e5e7ebdd; line-height:1; transform:translateY(-2px)}
 
-  /* sprites desfocados no topo direito */
-  .sprites{position:absolute; right:min(26px,4vw); top: clamp(10px, 4vw, 60px); display:flex; gap:28px; filter:blur(2px); opacity:.55}
-  .sprites i{display:block; width:92px; height:92px; background-size:contain; background-repeat:no-repeat; background-position:center}
-
-  /* bloco esquerdo (texto) */
-  .left{max-width:720px}
-  .hi{display:flex; align-items:center; gap:12px; color:#0a6c7a}
-  .hi .avatar{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-size:22px; background:#ffffff88; box-shadow:0 4px 12px #00000020}
-  h1{margin:.2em 0 .4em; font-size: clamp(28px, 4.4vw, 56px); color:#ffffff; text-shadow:0 2px 14px #00b8d920}
-  p.lead{margin:0 0 22px; font-weight:500; color:#ecffff; font-size: clamp(16px, 1.7vw, 22px)}
-
-  /* CTA */
-  .cta{all:unset; display:inline-grid; place-items:center; padding:14px 26px; border-radius:999px; cursor:pointer; font-weight:700; letter-spacing:.2px; color:#ffffff;
-       background: rgba(255,255,255,0.18); border:1px solid #ffffff40;
-       backdrop-filter: blur(10px) saturate(120%); -webkit-backdrop-filter: blur(10px) saturate(120%);
-       box-shadow:0 10px 22px rgba(0,0,0,.25), inset 0 1px 0 #ffffff55;}
-  .cta:hover{box-shadow:0 12px 26px rgba(0,0,0,.28), inset 0 1px 0 #ffffff66}
-  .cta:active{transform:translateY(1px); box-shadow:0 6px 14px rgba(0,0,0,.22)}
-  .cta:active{transform:translateY(1px); box-shadow:0 6px 14px var(--cta-shadow)}
-
-  /* bloco direito (imagem) */
-  .right{position:relative; min-height:360px}
-  .pokemon{position:relative; width:min(540px, 40vw); aspect-ratio:1/1; margin-inline:auto; filter:drop-shadow(0 38px 40px #08839d66)}
-  .poke{position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-position:center; opacity:0; transition:opacity .9s ease, transform 1.8s ease; will-change:opacity,transform}
-  .poke.show{opacity:1}
-  .poke.float{animation:float 4.2s ease-in-out infinite}
-  @keyframes float{0%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}100%{transform:translateY(0) rotate(-1deg)}}
-
-  /* ====== DOCK (reaproveitado e ajustado) ====== */
-  .dock-wrap{position:sticky; bottom:18px; display:grid; place-items:center; margin-top:-80px}
-  .dock{
-    width:min(680px, 92vw); height:78px; border-radius:999px;
-    background: var(--panel);
-    backdrop-filter: blur(16px) saturate(120%);
-    -webkit-backdrop-filter: blur(16px) saturate(120%);
-    border:1px solid #ffffff2a; /* contorno translúcido */
-    box-shadow: 0 18px 32px #00000055, inset 0 1px 0 #ffffff1a, inset 0 -1px 0 #00000040;
-    display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:28px; padding:12px 28px; position:relative;
-    overflow: visible; /* permite a pokébola sobrepor o dock */
-  }
-  .dock:after{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:radial-gradient(70% 160% at 50% -60%, #ffffff3a 0%, transparent 60%); mix-blend-mode:screen; opacity:.45}
-  .tab{all:unset; display:grid; place-items:center; gap:6px; cursor:pointer; text-align:center}
-  .tab svg{width:22px; height:22px; stroke:#e5e7eb88; fill:none}
-  .tab span{font-size:12px; color:#e5e7ebaa; line-height:1; transform:translateY(-2px);} 
-  .tab:hover svg{stroke:#fff}
-  .tab:hover span{color:#fff}
-  .tab.active svg{stroke:#fff}
-  .tab.active span{color:#fff}
-  .center{position:relative; display:grid; place-items:center; justify-self:center; gap:6px; padding-top:46px}
-  .center:before{display:none !important;} 
-  .center:after{content:""; position:absolute; top:22px; left:50%; transform:translateX(-50%); width:190px; height:38px; filter:blur(10px); opacity:.45; background:radial-gradient(60% 100% at 50% 30%, #ffffff28, transparent 70%)}
-  .pokeball-wrap{ position:absolute; top:-6px; left:50%; transform:translate(-50%,-58%); z-index:3; }
-  .pokeball{width:96px; height:96px; border-radius:50%; position:relative; overflow:hidden;
-  background:#ffffff; /* sem transparência sobre a pokébola */
-  border:1px solid #ffffff;
-  box-shadow:0 14px 24px rgba(0,0,0,.28), inset 0 2px 2px #ffffff88;
-}
-/* meia esfera inferior translúcida */
-.pokeball:before{display:none !important;}
-
-  .pokeball .top{position:absolute; inset:0; background:radial-gradient(120px 120px at 50% -12px, rgba(255,34,51,.9), rgba(197,7,18,.75) 60%); clip-path:inset(0 0 48% 0)}
-  .pokeball .band{position:absolute; top:48%; left:-8%; right:-8%; height:16%; background:rgba(17,17,17,.35); box-shadow:0 2px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08)}
-  .pokeball .btn{position:absolute; inset:0; margin:auto; width:32px; height:32px; border-radius:50%; background:linear-gradient(#ffffffcc,#e3e6e9cc); border:3px solid rgba(17,17,17,.45); box-shadow:inset 0 1px 0 #ffffffbb, 0 1px 0 rgba(0,0,0,.35), 0 0 0 6px rgba(17,17,17,.35); top:48%; transform:translateY(-50%)}
-  .pokeball .shine{position:absolute; left:10px; top:6px; width:64px; height:32px; border-radius:50%; background:radial-gradient(70px 40px at 10% 10%, #ffffff80, transparent 70%); mix-blend-mode:screen}
-  .center label{font-size:12px; color:#e5e7ebdd; margin-top:0; line-height:1; transform:translateY(-2px);}
-
-  /* Responsivo */
-  @media (max-width:980px){
-    .hero{grid-template-columns:1fr; text-align:left}
-    .right{order:-1}
-    .pokemon{width:min(420px, 60vw)}
-    .sprites{display:none}
-  }
-</style>
+    @media (max-width:980px){.hero{grid-template-columns:1fr} .right{order:-1} .pokemon{width:min(420px, 60vw)}}
+  </style>
 </head>
 <body>
   <div class="bg" aria-hidden="true"><div class="layer show" id="bgA"></div><div class="layer" id="bgB"></div></div>
+
   <main class="page">
     <section class="hero">
       <div class="left">
         <div class="hi"><span class="avatar">🧑‍🦰</span><span>Oi, Misty!</span></div>
         <h1>Bem vinda de volta à nossa Pokédex Lual!</h1>
-        <p class="lead">Nossa Pokédex te ajuda a encontrar todos os Pokémons que você deseja mais informações! Lembre de favoritar para não perder nada.</p>
-        <a class="cta" id="cta" href="browse.html" target="_blank" rel="noopener">Ver um Pokémon</a>
+        <p class="lead">Nossa Pokédex te ajuda a encontrar todos os Pokémons que você deseja mais informações!</p>
+        <a class="cta" href="./browse.html" target="_blank" rel="noopener">Ver um Pokémon</a>
       </div>
 
       <div class="right">
@@ -150,139 +77,50 @@
           <div class="poke show float" id="pokeA"></div>
           <div class="poke" id="pokeB"></div>
         </div>
-        <div class="sprites" aria-hidden="true">
-          <i></i><i></i><i></i>
-        </div>
       </div>
     </section>
 
-    <!-- Página de busca/lista -->
-    
-    <!-- Dock inferior -->
+    <!-- Dock -->
     <div class="dock-wrap">
-      <nav class="dock" role="navigation" aria-label="Navegação principal">
-        <button class="tab active" aria-label="Favoritos">
-          <svg viewBox="0 0 24 24" stroke-width="1.6" aria-hidden="true"><path d="M20.8 10.6c0 5.4-8.8 10.8-8.8 10.8S3.2 16 3.2 10.6A5.8 5.8 0 0 1 12 8a5.8 5.8 0 0 1 8.8 2.6Z"/></svg>
+      <nav class="dock" aria-label="Navegação">
+        <a class="tab" aria-label="Favoritos" href="./favorites.html" title="Favoritos">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M20.8 10.6c0 5.4-8.8 10.8-8.8 10.8S3.2 16 3.2 10.6A5.8 5.8 0 0 1 12 8a5.8 5.8 0 0 1 8.8 2.6Z"/></svg>
           <span>Favoritos</span>
-        </button>
+        </a>
         <div class="center" aria-current="page">
-          <div class="pokeball-wrap" aria-hidden="true">
-            <div class="pokeball">
-              <div class="top"></div>
-              <div class="band"></div>
-              <div class="btn"></div>
-              <div class="shine"></div>
-            </div>
-          </div>
+          <a class="pokeball-wrap" href="./index.html" title="Home">
+            <div class="pokeball"><div class="top"></div><div class="band"></div><div class="btn"></div></div>
+          </a>
           <label>Home</label>
         </div>
-        <button class="tab" aria-label="Conta">
-          <svg viewBox="0 0 24 24" stroke-width="1.6" aria-hidden="true">
-            <circle cx="12" cy="8.5" r="3.5"/>
-            <path d="M4.5 20c1.7-3.2 4.6-5 7.5-5s5.8 1.8 7.5 5"/>
-          </svg>
+        <a class="tab" aria-label="Conta" href="./account.html">
+          <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="8.5" r="3.5"/><path d="M4.5 20c1.7-3.2 4.6-5 7.5-5s5.8 1.8 7.5 5"/></svg>
           <span>Conta</span>
-        </button>
+        </a>
       </nav>
     </div>
   </main>
 
-<script>
-  // Navegação via link direto no CTA (fallback sem JS garantido)
-
-  // Tabs
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-
-  // ===== Tema cíclico: gradiente + Pokémon (a cada 3s) =====
-  const THEMES = [
-    {
-      name:'Squirtle',
-      grad:'var(--azulgrad)',
-      hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/squirtle.webp',
-      blurs:[
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/jigglypuff-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/charmander-blur.webp'
-      ]
-    },
-    {
-      name:'Pikachu',
-      grad:'var(--amagrad)',
-      hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu.webp',
-      blurs:[
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/jigglypuff-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/charmander-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/squirtle-blur.webp'
-      ]
-    },
-    {
-      name:'Jigglypuff',
-      grad:'var(--rosagrad)',
-      hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/jigglypuff.webp',
-      blurs:[
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/charmander-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/squirtle-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu-blur.webp'
-      ]
-    },
-    {
-      name:'Charmander',
-      grad:'var(--largrad)',
-      hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/charmander.webp',
-      blurs:[
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/squirtle-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu-blur.webp',
-        'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/jigglypuff-blur.webp'
-      ]
+  <script>
+    const THEMES = [
+      { name:'Squirtle',  grad:'var(--azulgrad)', hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/squirtle.webp' },
+      { name:'Pikachu',   grad:'var(--amagrad)',  hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/pikachu.webp' },
+      { name:'Jigglypuff',grad:'var(--rosagrad)', hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/jigglypuff.webp' },
+      { name:'Charmander',grad:'var(--largrad)',  hero:'https://raw.githubusercontent.com/jeanmolossi/assets/main/pokedex/charmander.webp' }
+    ];
+    const bgA=document.getElementById('bgA'), bgB=document.getElementById('bgB');
+    const pokeA=document.getElementById('pokeA'), pokeB=document.getElementById('pokeB');
+    const pokeRegion=document.querySelector('.pokemon');
+    let i=0, useA=true;
+    function applyTheme(idx){
+      const t = THEMES[idx%THEMES.length];
+      const show=useA?bgB:bgA, hide=useA?bgA:bgB;
+      show.style.background=t.grad; show.classList.add('show'); hide.classList.remove('show');
+      const pShow=useA?pokeB:pokeA, pHide=useA?pokeA:pokeB;
+      pShow.style.backgroundImage=`url('${t.hero}')`; pShow.classList.add('show','float'); pHide.classList.remove('show','float');
+      pokeRegion.setAttribute('aria-label', t.name); useA=!useA;
     }
-  ];
-
-  const bgA = document.getElementById('bgA');
-  const bgB = document.getElementById('bgB');
-  const pokeA = document.getElementById('pokeA');
-  const pokeB = document.getElementById('pokeB');
-  const sprites = document.querySelectorAll('.sprites i');
-  const pokeRegion = document.querySelector('.pokemon');
-
-  let i = 0, useA = true;
-
-  function applyTheme(idx){
-    const t = THEMES[idx % THEMES.length];
-
-    // BG crossfade
-    const show = useA ? bgB : bgA; // alterna para a outra camada
-    const hide = useA ? bgA : bgB;
-    show.style.background = t.grad;
-    show.classList.add('show');
-    hide.classList.remove('show');
-
-    // Pokémon crossfade + leve flutuação
-    const pShow = useA ? pokeB : pokeA;
-    const pHide = useA ? pokeA : pokeB;
-    pShow.style.backgroundImage = `url('${t.hero}')`;
-    pShow.classList.add('show','float');
-    pHide.classList.remove('show','float');
-
-    // Sprites (opcional)
-    sprites.forEach((el, k)=>{ if(t.blurs[k]) el.style.backgroundImage = `url('${t.blurs[k]}')`; });
-
-    // Acessibilidade
-    pokeRegion.setAttribute('aria-label', t.name);
-
-    useA = !useA;
-  }
-
-  // Inicializa com o primeiro tema
-  applyTheme(0);
-
-  // Loop a cada 3s
-  setInterval(()=>{ i = (i+1) % THEMES.length; applyTheme(i); }, 3000);
-</script>
+    applyTheme(0); setInterval(()=>{ i=(i+1)%THEMES.length; applyTheme(i); },3000);
+  </script>
 </body>
 </html>
