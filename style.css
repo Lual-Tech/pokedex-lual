@@ -1,0 +1,17 @@
+:root{
+    --branco: #FFFFFF;
+    --preto: #000000;
+    --cinzaclaro: #A3A3A3;
+    --cinzaesc: #464646;
+    --roxo: #AD299B;
+    --verm: #ff4646;
+    --rosagrad: radial-gradient(#FFE0EE, #F6B4D1);
+    --verdegrad: radial-gradient(#9efed0, #038e00);
+    --azulgrad: radial-gradient(#c0f6fa, #03a4e8);
+    --amagrad: radial-gradient(#FFD882, #CF8E00);
+    --largrad: radial-gradient(#FDE9A9, #D53E1B);
+}
+
+body {
+    background: var(--azulgrad);
+}

@@ -1,0 +1,108 @@
+/* ===== Estilos específicos da Pokédex (Aldryn) ===== */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    transition: background-color 0.3s;
+}
+
+/* Inputs no tema escuro */
+.input-dark {
+    background-color: var(--card-dark);
+    border-color: var(--cinzaclaro);
+    color: var(--text-light);
+}
+
+.input-dark:focus {
+    border-color: var(--primary-action);
+    box-shadow: 0 0 0 1px var(--primary-action);
+}
+
+/* Imagem de perfil */
+.profile-img-container {
+    position: relative;
+    z-index: 10;
+    margin-top: -4rem;
+}
+
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid var(--card-dark);
+    box-shadow: 0 0 0 4px var(--primary-action);
+    object-fit: cover;
+}
+
+/* Barra de progresso */
+.progress-bar-bg {
+    background-color: var(--cinzaesc);
+}
+
+.progress-bar-fill {
+    background-color: var(--primary-action);
+}
+
+/* Links secundários */
+.text-link-secondary {
+    color: var(--primary-secondary);
+}
+
+/* Estilos específicos da tela do Pokémon */
+.pokemon-card {
+    background-color: var(--pokemon-card-bg);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--cinzaesc);
+}
+
+.pokemon-header {
+    background: var(--pokemon-header-bg);
+}
+
+.pokemon-badge-type {
+    background-color: var(--pokemon-type-bg);
+    color: var(--branco);
+    font-weight: 600;
+}
+
+.pokemon-tab-active {
+    color: var(--branco);
+    border-bottom-color: var(--branco);
+}
+
+.pokemon-tab {
+    color: var(--cinzaclaro);
+    border-bottom-color: transparent;
+}
+
+.pokemon-tab:hover {
+    color: var(--branco);
+}
+
+/* Badges de fraqueza/resistência */
+.badge-electric { 
+    background: var(--type-electric-bg); 
+    color: var(--type-electric-text); 
+}
+
+.badge-grass { 
+    background: var(--type-grass-bg); 
+    color: var(--type-grass-text); 
+}
+
+.badge-fire { 
+    background-color: var(--type-fire-bg); 
+    color: var(--type-fire-text); 
+}
+
+/* Barra de navegação inferior */
+.bottom-nav-icon {
+    color: var(--cinzaclaro);
+}
+
+.bottom-nav-icon.active {
+    color: var(--pokemon-type-bg);
+    filter: drop-shadow(0 0 5px var(--pokemon-type-bg));
+}
