@@ -7,7 +7,6 @@ body {
     transition: background-color 0.3s;
 }
 
-/* Inputs no tema escuro */
 .input-dark {
     background-color: var(--card-dark);
     border-color: var(--cinzaclaro);
