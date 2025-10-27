@@ -1,0 +1,29 @@
+:root{
+  --rosagrad: radial-gradient(#FFE0EE, #F6B4D1);
+  --verdegrad: radial-gradient(#9efed0, #038e00);
+  --azulgrad: radial-gradient(#c0f6fa, #03a4e8);
+  --amagrad: radial-gradient(#FFD882, #CF8E00);
+  --largrad: radial-gradient(#FDE9A9, #D53E1B);
+  --panel: rgba(255,255,255,0.08);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; font:600 clamp(14px,1.6vw,18px)/1.35 "Poppins", system-ui}
+
+.dock-wrap{position:sticky; bottom:18px; display:grid; place-items:center}
+.dock{
+  width:min(680px,92vw); height:78px; border-radius:999px;
+  background:var(--panel); backdrop-filter:blur(16px) saturate(120%);
+  border:1px solid #ffffff2a; box-shadow:0 18px 32px #00000055, inset 0 1px 0 #ffffff1a;
+  display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:28px; padding:12px 28px; position:relative; overflow:visible
+}
+.dock a, .dock a *{ text-decoration: none !important; }
+
+.tab,.center{display:grid; place-items:center; gap:6px}
+.tab svg{width:22px; height:22px; stroke:#e5e7eb88; fill:none}
+.tab span,.center label{display:block; font-size:12px; color:#e5e7ebcc; line-height:1; margin-top:6px}
+
+.center{position:relative; justify-self:center}
+.pokeball-wrap{position:absolute; top:0; left:50%; transform:translate(-50%,-72%); z-index:3; pointer-events:auto}
+.pokebola-svg{display:block; width:96px; height:96px; border-radius:50%; box-shadow:0 14px 24px rgba(0,0,0,.28)}
