@@ -60,7 +60,7 @@ const toggleFavorite = (id) => {
 
 /*************** AUTH ***************/
 const isLoggedIn = () => localStorage.getItem(AUTH_KEY) === 'true';
-const loginUser   = () => { localStorage.setItem(AUTH_KEY,'true');  alertMessage('Login bem-sucedido!'); setView('profile'); };
+const loginUser   = () => { localStorage.setItem(AUTH_KEY,'true');  alertMessage('Login bem-sucedido!'); window.location.href = "/src/index.html"; };
 const logoutUser  = () => { localStorage.setItem(AUTH_KEY,'false'); alertMessage('Logout realizado.');   setView('login'); };
 
 /*************** HELPERS UI ***************/
