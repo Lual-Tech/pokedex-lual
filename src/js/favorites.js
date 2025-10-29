@@ -129,20 +129,3 @@ render();
   });
 })();
 
-/* =========================================================
-Notas rápidas sobre localStorage nesta tela:
-
-- Escopo: os dados ficam no navegador do usuário, por domínio/origem (não vão para o servidor).
-- Persistência: permanece após fechar o navegador. Limpa se apagar dados do site/“limpar cache”.
-- Limite: típico ~5MB por origem (varia por navegador). Aqui só salvo IDs, então é muito leve.
-- Sincronização: como cada render() lê do storage em tempo real, a UI está sempre alinhada
-  ao estado “oficial”. Se eu abrisse duas abas, um event storage poderia ajudar a ouvir mudanças
-  entre abas; como é um app simples, re-render no clique já resolve.
-- Robustez: loadFavs tem try/catch e validação para não quebrar caso alguém altere manualmente
-  o localStorage ou o JSON corrompa.
-
-Possíveis evoluções:
-- Usar `window.addEventListener('storage', ...)` para refletir mudanças em outra aba/janela.
-- Migrar para IndexedDB se o catálogo crescer (consulta por índice, mais espaço).
-- Criptografar os IDs se houvesse privacidade sensível (aqui não é necessário).
-========================================================= */
