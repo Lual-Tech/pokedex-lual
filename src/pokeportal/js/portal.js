@@ -585,3 +585,5 @@ function renderApp(){
 
 /* Boot inicial: quando o DOM carrega, eu leio o estado salvo e monto a UI correta. */
 window.addEventListener('load', renderApp);
+
+/*foi */
