@@ -1,16 +1,44 @@
-body{background:#0d0f11; color:#fff}
-.page{min-height:100dvh; display:grid; grid-template-rows:auto 1fr auto}
+/* Base escura para dar destaque aos gradientes e cards; texto claro por contraste. */
+body { background:#0d0f11; color:#fff }
 
-/* Hero alto p/ banner */
-.hero-bar{position:relative; padding:32px clamp(16px,4vw,48px); border-radius:18px; color:#fff; overflow:hidden;
-          background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25)); margin:16px clamp(16px,4vw,48px); min-height:320px;
-          display:flex; flex-direction:column; justify-content:flex-end}
-.hero-bar:before{content:""; position:absolute; inset:-20% -10% auto -10%; height:260%; background:var(--amagrad); z-index:-2}
-.hero-bar:after{content:""; position:absolute; right:-10%; top:-20%; width:60%; height:200%; background:url('../public/img/squirtle.svg') center/contain no-repeat; opacity:.18; z-index:-1}
-.hero-title{margin:0 0 18px; font-size:clamp(28px,3.8vw,48px)}
-.topline{display:flex; align-items:center; gap:12px; margin-bottom:8px; opacity:.9}
+/* Página com cabeçalho (hero-bar), área de conteúdo e dock no fim. */
+.page { min-height:100dvh; display:grid; grid-template-rows:auto 1fr auto }
 
-/* Seta voltar */
+/* ===========================
+   HERO (banner da tela de busca)
+   - Fundo com “vidro” escuro por cima do gradiente amarelo (var(--amagrad)).
+   - Título fica ancorado embaixo para leitura natural (olho desce até o campo de busca).
+   - O SVG gigante no :after é só decorativo com baixa opacidade. */
+.hero-bar{
+  position:relative;
+  padding:32px clamp(16px,4vw,48px);
+  border-radius:18px;
+  color:#fff;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25));
+  margin:16px clamp(16px,4vw,48px);
+  min-height:320px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+/* Gradiente “pintando” por baixo do vidro. Uso inset “negativo” para sair das bordas e dar volume. */
+.hero-bar:before{
+  content:""; position:absolute; inset:-20% -10% auto -10%;
+  height:260%; background:var(--amagrad); z-index:-2;
+}
+/* Marca d’água com o Squirtle (decorativo, bem sutil). */
+.hero-bar:after{
+  content:""; position:absolute; right:-10%; top:-20%;
+  width:60%; height:200%;
+  background:url('../public/img/squirtle.svg') center/contain no-repeat;
+  opacity:.18; z-index:-1;
+}
+.hero-title{ margin:0 0 18px; font-size:clamp(28px,3.8vw,48px) }
+.topline{ display:flex; align-items:center; gap:12px; margin-bottom:8px; opacity:.9 }
+
+/* ===========================
+   Botão “voltar”
+   - Estilo pill com glassmorphism leve.
+   - :active desce 1px só para dar sensação de clique físico. */
 .back-btn{
   all: unset;
   display: inline-grid; place-items: center;
@@ -22,26 +50,59 @@ body{background:#0d0f11; color:#fff}
 .back-btn:active{ transform: translateY(1px); }
 .back-btn svg{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; }
 
-/* Busca transparente */
-.toolbar{display:flex; gap:12px; align-items:center}
+/* ===========================
+   Barra de busca
+   - Container com vidro translúcido, ícone “fixo” e input sem borda padrão.
+   - O placeholder mantém contraste suficiente no tema escuro. */
+.toolbar{ display:flex; gap:12px; align-items:center }
 .search{
   flex:1; display:flex; align-items:center; gap:10px;
   padding:12px 16px; border-radius:999px;
   background:rgba(255,255,255,.18); border:1px solid #ffffff55;
   backdrop-filter: blur(10px) saturate(120%)
 }
-.search i{font-size:16px; color:#ffffffcc}
-.search input{all:unset; flex:1; color:#fff}
-.search input::placeholder{color:#ffffffcc}
+.search i{ font-size:16px; color:#ffffffcc }
+.search input{ all:unset; flex:1; color:#fff }
+.search input::placeholder{ color:#ffffffcc }
 
-/* Cards (padrão) */
-.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:22px; padding:22px clamp(16px,4vw,48px) 140px}
-.card{position:relative; border-radius:18px; padding:16px; background:#0e0f10; color:#fff; box-shadow:0 10px 18px rgba(0,0,0,.35); overflow:hidden}
-.card .thumb{height:170px; border-radius:14px; display:grid; place-items:center}
-.card .thumb img{width:78%; height:auto; filter:drop-shadow(0 16px 22px rgba(0,0,0,.4))}
-.card .meta{display:flex; justify-content:space-between; align-items:center; margin-top:12px; opacity:.95}
-.pill{position:absolute; right:16px; bottom:16px; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.18); border:1px solid #ffffff55}
+/* ===========================
+   Grid de cards
+   - auto-fill com minmax deixa responsivo sem media queries extras.
+   - padding inferior grande para não “brigar” com a dock fixa. */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:22px;
+  padding:22px clamp(16px,4vw,48px) 140px;
+}
+/* Card com sombra curta e cantos arredondados (sem exagero para manter leitura). */
+.card{
+  position:relative; border-radius:18px; padding:16px;
+  background:#0e0f10; color:#fff;
+  box-shadow:0 10px 18px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+/* Área da imagem usa grid para centralizar; o gradiente da espécie vai no style inline. */
+.card .thumb{ height:170px; border-radius:14px; display:grid; place-items:center }
+/* SVG recebe drop-shadow para dar sensação de “flutuando” acima do card. */
+.card .thumb img{ width:78%; height:auto; filter:drop-shadow(0 16px 22px rgba(0,0,0,.4)) }
+/* Rodapé do card com nome e um “pill” de ação/indicador. */
+.card .meta{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; opacity:.95 }
+/* Pill posicionado no canto para reforçar ação/continuidade (setinha ➜). */
+.pill{
+  position:absolute; right:16px; bottom:16px; width:34px; height:34px;
+  border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.18); border:1px solid #ffffff55;
+}
 
-/* Favoritar */
-.fav{position:absolute; top:12px; right:12px; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.92); color:#e11d48; font-size:16px; box-shadow:0 6px 14px rgba(0,0,0,.25); border:0; cursor:pointer}
-.fav.active{background:#e11d48; color:#fff}
+/* ===========================
+   Botão de favorito
+   - Coração visível no topo do card; .active inverte cores para estado ligado.
+   - Sombra dá destaque sem afetar o layout (não mexe no fluxo). */
+.fav{
+  position:absolute; top:12px; right:12px; width:28px; height:28px;
+  border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.92); color:#e11d48; font-size:16px;
+  box-shadow:0 6px 14px rgba(0,0,0,.25); border:0; cursor:pointer;
+}
+.fav.active{ background:#e11d48; color:#fff }

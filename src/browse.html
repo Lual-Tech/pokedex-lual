@@ -5,20 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Buscar Pokémons • Pokédex Lual</title>
 
-  <!-- Fonts / Icons -->
+  <!-- Tipografia/ícones:
+       - Poppins dá visual mais limpo e consistente com a Home.
+       - preconnect reduz a latência no primeiro uso da fonte.
+       - Font Awesome só para os ícones da barra de busca. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
-  <!-- CSS -->
+  <!-- CSS:
+       - shared-dock.css contém a navegação inferior reutilizável.
+       - browse.css guarda o layout da barra de busca e o grid de cards. -->
   <link rel="stylesheet" href="./css/shared-dock.css">
   <link rel="stylesheet" href="./css/browse.css">
 </head>
 <body>
+  <!-- <main> define a região principal; leitores de tela conseguem saltar direto para cá. -->
   <main class="page">
+    <!-- Hero-bar: cabeçalho da tela de busca com botão voltar e barra de pesquisa. -->
     <header class="hero-bar">
       <div class="topline">
+        <!-- Botão voltar:
+             - aria-label descreve a ação para quem não vê o ícone.
+             - data-home é lida no JS para navegar sem acoplar a URL no script. -->
         <button class="back-btn" aria-label="Voltar" data-home="./index.html">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M15 5L8 12l7 7"/>
@@ -26,52 +36,128 @@
           </svg>
         </button>
       </div>
+
+      <!-- Título direto e descritivo ajuda a orientação na página. -->
       <h1 class="hero-title">Qual pokémon você está procurando?</h1>
+
+      <!-- Toolbar agrupa controles relacionados à busca. -->
       <div class="toolbar">
+        <!-- role="search" fornece semântica específica para tecnologias assistivas. -->
         <div class="search" role="search">
+          <!-- Ícone apenas decorativo; aria-hidden evita “leitura” desnecessária. -->
           <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <!-- Campo de busca:
+               - type="search" habilita recursos nativos (limpar em mobile).
+               - aria-label descreve o propósito do input. -->
           <input id="q" type="search" placeholder="Buscar" aria-label="Buscar pokémon" />
         </div>
       </div>
     </header>
 
+    <!-- Grid de cartas com os Pokémons disponíveis:
+         - Cada .card tem data-id (chave) e data-name (texto para filtros).
+         - .thumb usa um gradiente da paleta e um SVG leve.
+         - .fav é um botão de estado; no JS, alterna favorito/desfavorito. -->
     <section class="cards" id="cards">
-      <div class="card" data-id="jigglypuff" data-name="jigglypuff"><button class="fav" title="Favoritar" type="button">❤</button><div class="thumb" style="background:var(--rosagrad)"><img alt="Jigglypuff" src="../public/img/jiggly.svg"></div><div class="meta"><span>Jigglypuff</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="bulbasaur"  data-name="bulbasaur"><button class="fav" title="Favoritar" type="button">❤</button><div class="thumb" style="background:var(--verdegrad)"><img alt="Bulbasaur" src="../public/img/bulba.svg"></div><div class="meta"><span>Bulbasaur</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="squirtle"   data-name="squirtle"><button class="fav" title="Favoritar" type="button">❤</button><div class="thumb" style="background:var(--azulgrad)"><img alt="Squirtle" src="../public/img/squirtle.svg"></div><div class="meta"><span>Squirtle</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="charmander" data-name="charmander"><button class="fav" title="Favoritar" type="button">❤</button><div class="thumb" style="background:var(--largrad)"><img alt="Charmander" src="../public/img/chari.svg"></div><div class="meta"><span>Charmander</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="sprigatito" data-name="sprigatito"><button class="fav" title="Favoritar" type="button">❤</button><div class="thumb" style="background:var(--verdegrad)"><img alt="Sprigatito" src="../public/img/sprigatito.svg"></div><div class="meta"><span>Sprigatito</span><span class="pill">➜</span></div></div>
+      <div class="card" data-id="jigglypuff" data-name="jigglypuff">
+        <button class="fav" title="Favoritar" type="button">❤</button>
+        <div class="thumb" style="background:var(--rosagrad)"><img alt="Jigglypuff" src="../public/img/jiggly.svg"></div>
+        <div class="meta"><span>Jigglypuff</span><span class="pill">➜</span></div>
+      </div>
 
-      <!-- extras (preencher grid) -->
-      <div class="card" data-id="jigglypuff" data-name="jigglypuff"><button class="fav" type="button">❤</button><div class="thumb" style="background:var(--rosagrad)"><img alt="Jigglypuff" src="../public/img/jiggly.svg"></div><div class="meta"><span>Jigglypuff</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="bulbasaur" data-name="bulbasaur"><button class="fav" type="button">❤</button><div class="thumb" style="background:var(--verdegrad)"><img alt="Bulbasaur" src="../public/img/bulba.svg"></div><div class="meta"><span>Bulbasaur</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="squirtle" data-name="squirtle"><button class="fav" type="button">❤</button><div class="thumb" style="background:var(--azulgrad)"><img alt="Squirtle" src="../public/img/squirtle.svg"></div><div class="meta"><span>Squirtle</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="charmander" data-name="charmander"><button class="fav" type="button">❤</button><div class="thumb" style="background:var(--largrad)"><img alt="Charmander" src="../public/img/chari.svg"></div><div class="meta"><span>Charmander</span><span class="pill">➜</span></div></div>
-      <div class="card" data-id="sprigatito" data-name="sprigatito"><button class="fav" type="button">❤</button><div class="thumb" style="background:var(--verdegrad)"><img alt="Sprigatito" src="../public/img/sprigatito.svg"></div><div class="meta"><span>Sprigatito</span><span class="pill">➜</span></div></div>
+      <div class="card" data-id="bulbasaur"  data-name="bulbasaur">
+        <button class="fav" title="Favoritar" type="button">❤</button>
+        <div class="thumb" style="background:var(--verdegrad)"><img alt="Bulbasaur" src="../public/img/bulba.svg"></div>
+        <div class="meta"><span>Bulbasaur</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="squirtle"   data-name="squirtle">
+        <button class="fav" title="Favoritar" type="button">❤</button>
+        <div class="thumb" style="background:var(--azulgrad)"><img alt="Squirtle" src="../public/img/squirtle.svg"></div>
+        <div class="meta"><span>Squirtle</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="charmander" data-name="charmander">
+        <button class="fav" title="Favoritar" type="button">❤</button>
+        <div class="thumb" style="background:var(--largrad)"><img alt="Charmander" src="../public/img/chari.svg"></div>
+        <div class="meta"><span>Charmander</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="sprigatito" data-name="sprigatito">
+        <button class="fav" title="Favoritar" type="button">❤</button>
+        <div class="thumb" style="background:var(--verdegrad)"><img alt="Sprigatito" src="../public/img/sprigatito.svg"></div>
+        <div class="meta"><span>Sprigatito</span><span class="pill">➜</span></div>
+      </div>
+
+      <!-- Cartas extras para preencher o grid em telas maiores;
+           mantêm a mesma estrutura para o JS tratar de forma uniforme. -->
+      <div class="card" data-id="jigglypuff" data-name="jigglypuff">
+        <button class="fav" type="button">❤</button>
+        <div class="thumb" style="background:var(--rosagrad)"><img alt="Jigglypuff" src="../public/img/jiggly.svg"></div>
+        <div class="meta"><span>Jigglypuff</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="bulbasaur" data-name="bulbasaur">
+        <button class="fav" type="button">❤</button>
+        <div class="thumb" style="background:var(--verdegrad)"><img alt="Bulbasaur" src="../public/img/bulba.svg"></div>
+        <div class="meta"><span>Bulbasaur</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="squirtle" data-name="squirtle">
+        <button class="fav" type="button">❤</button>
+        <div class="thumb" style="background:var(--azulgrad)"><img alt="Squirtle" src="../public/img/squirtle.svg"></div>
+        <div class="meta"><span>Squirtle</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="charmander" data-name="charmander">
+        <button class="fav" type="button">❤</button>
+        <div class="thumb" style="background:var(--largrad)"><img alt="Charmander" src="../public/img/chari.svg"></div>
+        <div class="meta"><span>Charmander</span><span class="pill">➜</span></div>
+      </div>
+
+      <div class="card" data-id="sprigatito" data-name="sprigatito">
+        <button class="fav" type="button">❤</button>
+        <div class="thumb" style="background:var(--verdegrad)"><img alt="Sprigatito" src="../public/img/sprigatito.svg"></div>
+        <div class="meta"><span>Sprigatito</span><span class="pill">➜</span></div>
+      </div>
     </section>
 
+    <!-- Dock fixo:
+         - Mesmo padrão visual das outras páginas para consistência.
+         - Ícones SVG inline para controle de estilo no CSS.
+         - O bloco central mantém o atalho para Home e um link textual redundante (mais acessível). -->
     <div class="dock-wrap">
       <nav class="dock" aria-label="Navegação">
         <a class="tab" href="./favoritados/favorites.html" title="Favoritos">
-          <svg viewBox="0 0 24 24" stroke-width="1.6"><path d="M20.8 10.6c0 5.4-8.8 10.8-8.8 10.8S3.2 16 3.2 10.6A5.8 5.8 0 0 1 12 8a5.8 5.8 0 0 1 8.8 2.6Z"/></svg>
+          <svg viewBox="0 0 24 24" stroke-width="1.6">
+            <path d="M20.8 10.6c0 5.4-8.8 10.8-8.8 10.8S3.2 16 3.2 10.6A5.8 5.8 0 0 1 12 8a5.8 5.8 0 0 1 8.8 2.6Z"/>
+          </svg>
           <span>Favoritos</span>
         </a>
 
         <div class="center">
+          <!-- Pokébola como atalho visual para a Home; alt descreve a função. -->
           <a class="pokeball-wrap" href="./index.html" title="Home">
             <img class="pokebola-svg" src="../public/img/pokebola.svg" alt="Pokébola – Home">
           </a>
+          <!-- Link textual redundante melhora navegabilidade para quem prefere texto. -->
           <a class="reset" href="./index.html"><label>Home</label></a>
         </div>
 
+        <!-- “Conta” como espaço reservado para futura integração de perfil/login. -->
         <a class="tab" href="#">
-          <svg viewBox="0 0 24 24" stroke-width="1.6"><circle cx="12" cy="8.5" r="3.5"/><path d="M4.5 20c1.7-3.2 4.6-5 7.5-5s5.8 1.8 7.5 5"/></svg>
+          <svg viewBox="0 0 24 24" stroke-width="1.6">
+            <circle cx="12" cy="8.5" r="3.5"/>
+            <path d="M4.5 20c1.7-3.2 4.6-5 7.5-5s5.8 1.8 7.5 5"/>
+          </svg>
           <span>Conta</span>
         </a>
       </nav>
     </div>
   </main>
 
+  <!-- browse.js centraliza a lógica de filtro, favoritos e navegação do botão voltar.
+       O HTML fornece atributos (id, data-*) para o JS operar sem acoplamento rígido. -->
   <script src="./js/browse.js"></script>
 </body>
 </html>

@@ -1,16 +1,43 @@
-body{background:#0d0f11; color:#fff}
-.page{min-height:100dvh; display:grid; grid-template-rows:auto 1fr auto}
+/* Tema escuro para destacar gradientes e ilustrações; texto claro por contraste. */
+body { background:#0d0f11; color:#fff }
 
-/* Hero */
-.hero-bar{position:relative; padding:32px clamp(16px,4vw,48px); border-radius:18px; color:#fff; overflow:hidden;
-          background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25)); margin:16px clamp(16px,4vw,48px); min-height:320px;
-          display:flex; flex-direction:column; justify-content:flex-end}
-.hero-bar:before{content:""; position:absolute; inset:-20% -10% auto -10%; height:260%; background:var(--verdegrad); z-index:-2}
-.hero-bar:after{content:""; position:absolute; right:-10%; top:-25%; width:60%; height:220%; background:url('../../public/img/sprigatito.svg') center/contain no-repeat; opacity:.2; z-index:-1}
-.hero-title{margin:0 0 18px; font-size:clamp(28px,3.8vw,48px)}
-.topline{display:flex; align-items:center; gap:12px; margin-bottom:8px; opacity:.9}
+/* Layout de página: header (hero), conteúdo (cards) e dock no fim. */
+.page { min-height:100dvh; display:grid; grid-template-rows:auto 1fr auto }
 
-/* Seta voltar */
+/* ===========================
+   HERO (banner dos Favoritos)
+   - “Vidro” escuro (overlay) sobre gradiente verde (var(--verdegrad)).
+   - Título ancorado na base para conduzir o olhar até a busca.
+   - Marca d’água do Sprigatito bem sutil no :after. */
+.hero-bar{
+  position:relative;
+  padding:32px clamp(16px,4vw,48px);
+  border-radius:18px;
+  color:#fff;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.25));
+  margin:16px clamp(16px,4vw,48px);
+  min-height:320px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+}
+/* Gradiente “derramado” atrás do vidro; inset negativo cria volume além das bordas. */
+.hero-bar:before{
+  content:""; position:absolute; inset:-20% -10% auto -10%;
+  height:260%; background:var(--verdegrad); z-index:-2;
+}
+/* Sprigatito em grande escala para assinatura visual da tela. */
+.hero-bar:after{
+  content:""; position:absolute; right:-10%; top:-25%;
+  width:60%; height:220%;
+  background:url('../../public/img/sprigatito.svg') center/contain no-repeat;
+  opacity:.2; z-index:-1;
+}
+.hero-title{ margin:0 0 18px; font-size:clamp(28px,3.8vw,48px) }
+.topline{ display:flex; align-items:center; gap:12px; margin-bottom:8px; opacity:.9 }
+
+/* ===========================
+   Botão “Voltar”
+   - Pill com glassmorphism; leve feedback em :hover/:active. */
 .back-btn{
   all: unset;
   display: inline-grid; place-items: center;
@@ -22,25 +49,57 @@ body{background:#0d0f11; color:#fff}
 .back-btn:active{ transform: translateY(1px); }
 .back-btn svg{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; }
 
-/* Busca */
-.toolbar{display:flex; gap:12px; align-items:center}
+/* ===========================
+   Barra de busca
+   - Container translúcido; input sem chrome padrão para combinar com o tema. */
+.toolbar{ display:flex; gap:12px; align-items:center }
 .search{
   flex:1; display:flex; align-items:center; gap:10px;
   padding:12px 16px; border-radius:999px;
   background:rgba(255,255,255,.18); border:1px solid #ffffff55;
   backdrop-filter: blur(10px) saturate(120%)
 }
-.search i{font-size:16px; color:#ffffffcc}
-.search input{all:unset; flex:1; color:#fff}
-.search input::placeholder{color:#ffffffcc}
+.search i{ font-size:16px; color:#ffffffcc }
+.search input{ all:unset; flex:1; color:#fff }
+.search input::placeholder{ color:#ffffffcc }
 
-/* Cards — mesmo tamanho do Browse */
-.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:22px; padding:22px clamp(16px,4vw,48px) 140px}
-.card{position:relative; border-radius:18px; padding:16px; background:#0e0f10; color:#fff; box-shadow:0 10px 18px rgba(0,0,0,.35); overflow:hidden}
-.card .thumb{height:170px; border-radius:14px; display:grid; place-items:center}
-.card .thumb img{width:78%; height:auto; filter:drop-shadow(0 16px 22px rgba(0,0,0,.4))}
-.card .meta{display:flex; justify-content:space-between; align-items:center; margin-top:12px; opacity:.95}
-.pill{position:absolute; right:16px; bottom:16px; width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.18); border:1px solid #ffffff55}
+/* ===========================
+   Grid de cards (mesmo sizing do Browse)
+   - auto-fill + minmax torna responsivo sem media queries extras.
+   - padding inferior amplo para não colidir com a dock fixa. */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:22px;
+  padding:22px clamp(16px,4vw,48px) 140px;
+}
+/* Card escuro com sombra leve; conteúdo sem “vazar” graças ao overflow:hidden. */
+.card{
+  position:relative; border-radius:18px; padding:16px;
+  background:#0e0f10; color:#fff;
+  box-shadow:0 10px 18px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+/* Thumb centraliza o SVG; gradiente da espécie vai inline no style. */
+.card .thumb{ height:170px; border-radius:14px; display:grid; place-items:center }
+/* Sombra no SVG dá sensação de profundidade “acima” do card. */
+.card .thumb img{ width:78%; height:auto; filter:drop-shadow(0 16px 22px rgba(0,0,0,.4)) }
+/* Rodapé do card com nome e “pill” indicativa. */
+.card .meta{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; opacity:.95 }
+/* Pill posicionado no canto para reforçar continuidade/ação. */
+.pill{
+  position:absolute; right:16px; bottom:16px; width:34px; height:34px;
+  border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.18); border:1px solid #ffffff55;
+}
 
-/* Coração (desfavoritar) */
-.fav{position:absolute; top:12px; right:12px; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; background:#e11d48; color:#fff; font-size:16px; box-shadow:0 6px 14px rgba(0,0,0,.25); border:0; cursor:pointer}
+/* ===========================
+   Coração (desfavoritar)
+   - Estado padrão já é “ativo” (vermelho) porque nesta tela tudo é favorito.
+   - Sombra destaca o botão sem alterar layout (não afeta fluxo). */
+.fav{
+  position:absolute; top:12px; right:12px; width:28px; height:28px;
+  border-radius:50%; display:grid; place-items:center;
+  background:#e11d48; color:#fff; font-size:16px;
+  box-shadow:0 6px 14px rgba(0,0,0,.25); border:0; cursor:pointer;
+}

@@ -5,32 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Home • Pokédex Lual</title>
 
-  <!-- Poppins -->
+  <!-- Tipografia Poppins melhora legibilidade e dá aparência de app moderno.
+       Preconnect abre conexão antecipada com os domínios das fontes e reduz latência. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
+  <!-- Organização de CSS: shared-dock.css traz estilos reutilizáveis da barra inferior;
+       home.css contém estilos específicos desta página. Isso facilita manutenção e cache. -->
   <link rel="stylesheet" href="./css/shared-dock.css">
   <link rel="stylesheet" href="./css/home.css">
 </head>
 <body>
-  <!-- Fundo animado -->
+  <!-- Fundo animado puramente decorativo; aria-hidden="true" evita ruído para leitores de tela.
+       Duas camadas (.layer) alternam a classe .show para criar transições suaves sem flicker. -->
   <div class="bg" aria-hidden="true">
     <div class="layer show" id="bgA"></div>
     <div class="layer" id="bgB"></div>
   </div>
 
+  <!-- <main> marca a região principal única da página, melhorando navegação assistiva e SEO.
+       A classe .page concentra regras de layout (grid/flex) definidas no CSS. -->
   <main class="page">
+    <!-- Seção “hero” apresenta o contexto rapidamente e oferece um CTA direto.
+         Layout em duas colunas orienta o olhar: texto/ação à esquerda e visual à direita. -->
     <section class="hero">
       <div class="left">
+        <!-- Saudação inicial estática que pode futuramente vir do login (personalização simples). -->
         <div class="hi"><span class="avatar">🧑‍🦰</span><span>Oi, Misty!</span></div>
+
+        <!-- <h1> comunica o propósito principal da tela. Somente um título de nível 1 por página. -->
         <h1>Bem vinda de volta à nossa Pokédex Lual!</h1>
+
+        <!-- .lead reforça rapidamente o valor da aplicação e direciona a ação. -->
         <p class="lead">Nossa Pokédex te ajuda a encontrar todos os Pokémons que você deseja mais informações!</p>
+
+        <!-- CTA envia para a listagem/fluxo de descoberta (browse.html). Link simples mantém navegação leve. -->
         <a class="cta" href="./browse.html">Ver um Pokémon</a>
       </div>
 
       <div class="right">
+        <!-- role="img" com aria-label descreve a ilustração construída por CSS, tornando-a acessível.
+             #pokeA inicia visível (.show) e animado (.float); #pokeB permanece pronto para alternância. -->
         <div class="pokemon" role="img" aria-label="Squirtle">
           <div class="poke show float" id="pokeA"></div>
           <div class="poke" id="pokeB"></div>
@@ -38,23 +54,29 @@
       </div>
     </section>
 
-    <!-- Dock fixo -->
+    <!-- Dock fixo implementa um padrão familiar de apps mobile: acesso rápido às ações principais.
+         <nav aria-label="Navegação"> fornece contexto semântico e aria-current indica a aba ativa. -->
     <div class="dock-wrap">
       <nav class="dock" aria-label="Navegação">
+        <!-- Favoritos direciona para a lista marcada pelo usuário, fechando o ciclo ver→favoritar→acessar. -->
         <a class="tab" aria-label="Favoritos" href="./favoritados/favorites.html" title="Favoritos">
+          <!-- SVG inline permite controle de stroke/tamanho/hover via CSS sem novas requisições. -->
           <svg viewBox="0 0 24 24" stroke-width="1.6">
             <path d="M20.8 10.6c0 5.4-8.8 10.8-8.8 10.8S3.2 16 3.2 10.6A5.8 5.8 0 0 1 12 8a5.8 5.8 0 0 1 8.8 2.6Z"/>
           </svg>
           <span>Favoritos</span>
         </a>
 
+        <!-- Centro indica a página atual; rótulo textual complementa o ícone, melhorando acessibilidade. -->
         <div class="center" aria-current="page">
+          <!-- A pokébola funciona como atalho para a Home; alt descreve a função do ícone. -->
           <a class="pokeball-wrap" href="./index.html" title="Home">
             <img class="pokebola-svg" src="../public/img/pokebola.svg" alt="Pokébola – Home">
           </a>
           <label>Home</label>
         </div>
 
+        <!-- Aba Conta permanece como placeholder; integração futura deve exibir avatar/nome e ações de perfil. -->
         <a class="tab" aria-label="Conta" href="#">
           <svg viewBox="0 0 24 24" stroke-width="1.6">
             <circle cx="12" cy="8.5" r="3.5"/>
@@ -66,7 +88,8 @@
     </div>
   </main>
 
-  <!-- JS -->
+  <!-- home.js concentra o comportamento da página: alternância das camadas do fundo e da ilustração,
+       além de pequenos handlers. Atualizações de DOM são pontuais (troca de classes) para manter desempenho. -->
   <script src="./js/home.js"></script>
 </body>
 </html>

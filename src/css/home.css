@@ -1,31 +1,108 @@
-body{color:#07363e; overflow-x:hidden; background:#000}
+/* Paleta e base da página:
+   - Cor de texto escura-azulada para contraste em cima do fundo escuro.
+   - overflow-x:hidden evita scroll horizontal quando algo “sai” alguns px (ex: sombras/anim).
+   - Fundo preto ajuda os gradientes do herói a “saltarem” na tela. */
+body { color:#07363e; overflow-x:hidden; background:#000 }
 
-/* BG animado */
-.bg{position:fixed; inset:0; z-index:-1}
-.bg .layer{position:absolute; inset:0; opacity:0; transition:opacity .9s ease; background:var(--azulgrad)}
-.bg .layer.show{opacity:1}
+/* ===========================
+   BG animado (camadas A/B)
+   - A .bg fica fixa e cobre a tela inteira (inset:0) atrás do conteúdo (z-index:-1).
+   - Cada .layer ocupa 100% da área e começa invisível (opacity:0).
+   - A classe .show liga a opacidade com transição suave (opacity .9s).
+   - O gradiente padrão vem de var(--azulgrad) e é trocado pelo JS. */
+.bg { position:fixed; inset:0; z-index:-1 }
+.bg .layer { position:absolute; inset:0; opacity:0; transition:opacity .9s ease; background:var(--azulgrad) }
+.bg .layer.show { opacity:1 }
 
-/* Layout */
-.page{min-height:100dvh; display:grid; grid-template-rows:1fr auto}
-.hero{display:grid; grid-template-columns:1.1fr 1fr; align-items:center; gap:min(5vw,64px);
-      padding:clamp(20px,6vw,72px); padding-bottom:140px; position:relative}
-.left{max-width:720px}
-.hi{display:flex; align-items:center; gap:12px}
-.hi .avatar{width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-size:22px; background:#ffffff88}
-h1{margin:.2em 0 .4em; font-size:clamp(28px,4.4vw,56px); color:#fff}
-p.lead{margin:0 0 22px; color:#ecffff; font-weight:500}
-.cta{all:unset; display:inline-grid; place-items:center; padding:14px 26px; border-radius:999px; cursor:pointer; color:#fff; font-weight:700;
-     background:rgba(255,255,255,0.18); border:1px solid #ffffff40; backdrop-filter:blur(10px) saturate(120%)}
+/* ===========================
+   Layout geral da página
+   - .page usa grid com 2 linhas: conteúdo (1fr) e dock fixo ao fim (auto).
+   - 100dvh garante ocupar a altura total da viewport, respeitando barras do mobile. */
+.page { min-height:100dvh; display:grid; grid-template-rows:1fr auto }
 
-.right{position:relative; min-height:360px}
-.pokemon{position:relative; width:min(540px, 40vw); aspect-ratio:1/1; margin-inline:auto; filter:drop-shadow(0 38px 40px #08839d66)}
-.poke{position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-position:center; opacity:0; transition:opacity .9s ease, transform 1.8s ease}
-.poke.show{opacity:1}
-.poke.float{animation:float 4.2s ease-in-out infinite}
-@keyframes float{0%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-8px) rotate(1deg)}100%{transform:translateY(0) rotate(-1deg)}}
+/* ===========================
+   Seção Hero (padrão 2 colunas)
+   - Grid em 1.1fr/1fr p/ dar um pouco mais de espaço ao texto.
+   - align-items:center alinha verticalmente.
+   - gap usa min(5vw,64px) p/ escalar com viewport sem exagerar.
+   - padding com clamp cria espaçamento responsivo.
+   - padding-bottom maior para não “brigar” com a dock inferior. */
+.hero {
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  align-items:center;
+  gap:min(5vw,64px);
+  padding:clamp(20px,6vw,72px);
+  padding-bottom:140px;
+  position:relative;
+}
 
+/* Limita largura da coluna de texto p/ uma leitura confortável. */
+.left { max-width:720px }
+
+/* Cabeçalho da saudação: avatar + nome alinhados. */
+.hi { display:flex; align-items:center; gap:12px }
+
+/* Avatar simples circular com fundo translúcido para destacar no escuro. */
+.hi .avatar {
+  width:40px; height:40px; border-radius:50%;
+  display:grid; place-items:center; font-size:22px;
+  background:#ffffff88;
+}
+
+/* Título principal grande e claro:
+   - clamp mantém legível em telas pequenas e evita exagero em telas muito grandes. */
+h1 { margin:.2em 0 .4em; font-size:clamp(28px,4.4vw,56px); color:#fff }
+
+/* Lead com cor ciano clara p/ contraste em cima do fundo. */
+p.lead { margin:0 0 22px; color:#ecffff; font-weight:500 }
+
+/* CTA com “glassmorphism” leve:
+   - all:unset remove estilos padrões do link.
+   - backdrop-filter cria o efeito de vidro (blur + saturate) sobre o BG animado. */
+.cta {
+  all:unset; display:inline-grid; place-items:center;
+  padding:14px 26px; border-radius:999px; cursor:pointer; color:#fff; font-weight:700;
+  background:rgba(255,255,255,0.18); border:1px solid #ffffff40; backdrop-filter:blur(10px) saturate(120%);
+}
+
+/* ===========================
+   Coluna da ilustração
+   - .right assegura uma altura mínima para a área do Pokémon.
+   - .pokemon usa aspect-ratio: 1/1 para manter proporção quadrada e escalar com viewport.
+   - drop-shadow adiciona profundidade sem mexer no layout (não influencia box-model). */
+.right { position:relative; min-height:360px }
+.pokemon {
+  position:relative; width:min(540px, 40vw); aspect-ratio:1/1; margin-inline:auto;
+  filter:drop-shadow(0 38px 40px #08839d66);
+}
+
+/* Camadas do Pokémon:
+   - Usamos duas .poke para alternar imagens com transição de opacity + transform.
+   - background-size:contain mantém o SVG inteiro visível.
+   - Transições mais longas na transform criam flutuação suave sem travar. */
+.poke {
+  position:absolute; inset:0;
+  background-size:contain; background-repeat:no-repeat; background-position:center;
+  opacity:0; transition:opacity .9s ease, transform 1.8s ease;
+}
+.poke.show { opacity:1 }
+
+/* Animação de “boiar” leve e contínua. */
+.poke.float { animation:float 4.2s ease-in-out infinite }
+@keyframes float {
+  0%   { transform:translateY(0) rotate(-1deg) }
+  50%  { transform:translateY(-8px) rotate(1deg) }
+  100% { transform:translateY(0) rotate(-1deg) }
+}
+
+/* ===========================
+   Responsividade
+   - Em telas <= 980px, o hero vira 1 coluna.
+   - A coluna da imagem sobe (order:-1) para ser vista primeiro no mobile.
+   - A ilustração reduz um pouco para caber melhor. */
 @media (max-width:980px){
-  .hero{grid-template-columns:1fr}
-  .right{order:-1}
-  .pokemon{width:min(420px, 60vw)}
+  .hero { grid-template-columns:1fr }
+  .right { order:-1 }
+  .pokemon { width:min(420px, 60vw) }
 }

@@ -2,27 +2,40 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
+  <!-- viewport-fit=cover permite ocupar toda a área útil em telas com notch (iOS) -->
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>PokePortal • Autenticação e Pokémon</title>
 
-  <!-- Tailwind -->
+  <!-- Tailwind via CDN: utilitárias para montar layout/responsividade rapidamente -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Poppins -->
+  <!-- Poppins: padroniza a tipografia com visual de app; preconnect reduz latência no first paint -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
+  <!-- portal.css: ajustes finos de tema/overrides que não são práticos só com utilitárias -->
   <link rel="stylesheet" href="./css/portal.css">
 </head>
 
 <body class="min-h-screen antialiased flex items-center justify-center p-4">
+  <!--
+    Estrutura base do “portal” (SPA leve):
+    - O body usa Tailwind para centralizar o conteúdo na tela (flex + center) e garantir altura mínima (min-h-screen).
+    - #app é o contêiner onde o JS renderiza tudo (login, estado autenticado, etc.).
+    - O texto “Carregando...” é um fallback inicial (progressive enhancement) para não ficar tela vazia.
+  -->
   <div id="app" class="w-full">
     <p class="text-center text-sm text-gray-400">Carregando...</p>
   </div>
 
-  <!-- JS -->
+  <!--
+    portal.js faz o boot da aplicação:
+    - detecta estado de autenticação (ex.: localStorage/cookie/token).
+    - se não autenticado: insere o formulário de login no #app.
+    - se autenticado: renderiza a Home/Conta integrando com as outras páginas do PokePortal.
+    - mantém a lógica separada do HTML para facilitar manutenção e testes.
+  -->
   <script src="./js/portal.js"></script>
 </body>
 </html>
