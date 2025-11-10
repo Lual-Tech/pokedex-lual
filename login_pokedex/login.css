@@ -1,0 +1,17 @@
+input:focus {
+    outline: none !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 0 0 1px #c084fc !important;
+}
+
+.social-button {
+    @apply w-full flex items-center justify-center space-x-2 p-3 border border-gray-700 bg-black hover:bg-gray-900 rounded-lg transition duration-200 font-medium;
+}
+
+.input-field {
+    @apply w-full px-4 py-3 bg-input-bg border border-gray-700 rounded-lg text-white placeholder-gray-500 transition duration-200;
+}
+
+.login-button {
+    @apply w-full p-3 bg-primary-dark hover:bg-primary-dark/80 rounded-lg text-lg font-semibold shadow-lg shadow-primary-dark/40 transition duration-300 ease-in-out transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 focus:ring-offset-background-dark;
+}
