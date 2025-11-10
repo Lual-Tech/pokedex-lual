@@ -1,0 +1,22 @@
+/* Configurações do Tailwind (cores e fontes) */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+/* Foco nos inputs */
+input:focus {
+    outline: none !important;
+    border-color: #c084fc !important;
+    box-shadow: 0 0 0 1px #c084fc !important;
+}
+
+/* Cores personalizadas para Tailwind */
+:root {
+    --primary-dark: #8e24aa;
+    --primary-light: #c084fc;
+    --background-dark: #000000;
+    --card-dark: #000000;
+    --input-bg: #1f1f1f;
+}
