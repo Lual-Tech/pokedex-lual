@@ -1,0 +1,18 @@
+.profile-banner {
+    background: linear-gradient(180deg, #8e24aa 0%, #333333 100%);
+    height: 200px;
+    position: relative;
+}
+
+.profile-card {
+    max-width: 800px;
+    margin-top: -80px; 
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.mew-icon { opacity: 0.15; width: 120px; height: 120px; position: absolute; top: 10px; }
+.mew-icon.left { left: 5%; transform: scaleX(-1); }
+.mew-icon.right { right: 5%; }
+
+.tab.active { border-color: #c084fc; background-color: #1f1f1f; }
