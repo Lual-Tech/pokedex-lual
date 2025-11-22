@@ -3,118 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Pokédex</title>
-
-    <!-- Tailwind -->
+    <title>Login - PokéSystem</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Configuração do Tailwind -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-dark': '#8e24aa',
-                        'primary-light': '#c084fc',
-                        'background-dark': '#000000',
-                        'input-bg': '#1f1f1f',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Fonte -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- CSS externo -->
+    <link rel="stylesheet" href="style.css">
 </head>
+<body class="flex items-center justify-center min-h-screen p-4">
 
-<body class="bg-background-dark text-white font-sans min-h-screen flex items-center justify-center p-4">
+    <main class="w-full max-w-md flex flex-col items-center space-y-8 animate-fade-in">
+        
+        <header class="text-center space-y-4">
+            <div class="flex justify-center">
+                <i class="ph-fill ph-pokeball text-5xl text-white"></i>
+            </div>
+            <h1 class="text-2xl font-bold tracking-wide">Faça login para continuar</h1>
+        </header>
 
-    <main id="login-container" class="w-full min-h-screen flex items-center justify-center transition-opacity duration-500">
-        <div class="w-full max-w-md px-4 sm:px-6 md:px-0">
+        <section class="w-full space-y-3">
+            <button type="button" class="social-btn w-full py-3 rounded-lg flex items-center justify-center space-x-3 text-sm font-medium hover:border-gray-500">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Logo Google" class="w-5 h-5">
+                <span>Continuar com o Google</span>
+            </button>
+            <button type="button" class="social-btn w-full py-3 rounded-lg flex items-center justify-center space-x-3 text-sm font-medium hover:border-gray-500">
+                <i class="ph-fill ph-apple-logo text-xl"></i>
+                <span>Continuar com o Apple ID</span>
+            </button>
+        </section>
 
-            <!-- Cabeçalho -->
-            <section class="text-center mb-10">
-                <div class="mb-4 inline-block w-14 h-14">
-                    <img src="img/pokeball.svg" alt="Pokébola" class="w-full h-full">
+        <div class="w-full flex items-center space-x-4">
+            <div class="h-px bg-gray-800 flex-1"></div>
+            <span class="text-gray-500 text-sm">ou</span>
+            <div class="h-px bg-gray-800 flex-1"></div>
+        </div>
+
+        <form id="loginForm" class="w-full space-y-5" novalidate>
+            
+            <div id="feedbackMessage" class="hidden p-3 rounded text-sm text-center"></div>
+
+            <div class="space-y-2">
+                <label for="email" class="text-sm text-gray-400 block">Nome de usuário ou e-mail</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ph ph-user text-gray-500 text-lg"></i>
+                    </div>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="custom-input w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-600 focus:ring-0" 
+                        placeholder="Usuario@gmail.com"
+                        required
+                    >
                 </div>
-                <h1 class="text-3xl font-bold mt-4">Faça login para continuar</h1>
-            </section>
-
-            <!-- Botões sociais -->
-            <section class="space-y-3 mb-6">
-                <button class="social-button">
-                    <img src="img/google.svg" alt="Google" class="w-5 h-5">
-                    <span>Continuar com o Google</span>
-                </button>
-
-                <button class="social-button">
-                    <img src="img/apple.svg" alt="Apple ID" class="w-5 h-5 invert">
-                    <span>Continuar com o Apple ID</span>
-                </button>
-            </section>
-
-            <!-- Divisor -->
-            <div class="flex items-center my-6">
-                <div class="flex-grow border-t border-gray-800"></div>
-                <span class="mx-4 text-sm text-gray-400 font-medium">OU</span>
-                <div class="flex-grow border-t border-gray-800"></div>
             </div>
 
-            <!-- Formulário -->
-            <form id="login-form" class="space-y-4">
-                <div class="space-y-1">
-                    <label for="username" class="text-sm font-medium text-gray-300 block">E-mail</label>
-                    <input type="email" id="username" name="username" required placeholder="usuario@gmail.com"
-                        class="input-field">
+            <div class="space-y-2">
+                <label for="password" class="text-sm text-gray-400 block">Senha</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="ph ph-lock text-gray-500 text-lg"></i>
+                    </div>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="custom-input w-full pl-10 pr-4 py-3 rounded-lg text-white placeholder-gray-600 focus:ring-0" 
+                        placeholder="Senha"
+                        required
+                    >
                 </div>
-
-                <div class="space-y-1">
-                    <label for="password" class="text-sm font-medium text-gray-300 block">Senha</label>
-                    <input type="password" id="password" name="password" required placeholder="Senha"
-                        class="input-field">
+                <div class="flex justify-end">
+                    <a href="#" class="text-xs text-gray-500 hover:text-gray-300 transition-colors">Esqueceu a Senha?</a>
                 </div>
+            </div>
 
-                <div class="text-right pt-1">
-                    <a href="#" class="text-sm text-primary-light hover:text-primary-light/80 transition duration-200">
-                        Esqueceu a Senha?
-                    </a>
-                </div>
+            <button type="submit" id="submitBtn" class="btn-primary w-full py-3 rounded-lg font-bold text-white shadow-lg shadow-purple-900/20 flex items-center justify-center gap-2">
+                <span>Entrar</span>
+                <div class="loader" id="btnLoader"></div>
+            </button>
 
-                <p id="status-message" role="alert" class="hidden text-sm pt-4 font-medium"></p>
+        </form>
 
-                <button type="submit" class="login-button">
-                    Entrar
-                </button>
-            </form>
+        <footer class="text-center text-sm text-gray-500">
+            Não possui uma conta? <a href="#" class="text-white font-medium hover:underline">Cadastre-se agora</a>
+        </footer>
 
-            <section class="text-center mt-6">
-                <p class="text-sm text-gray-400">
-                    Não possui uma conta?
-                    <a href="#" class="font-semibold text-primary-light hover:text-primary-light/80 transition duration-200">
-                        Cadastre-se agora
-                    </a>
-                </p>
-            </section>
-        </div>
     </main>
 
-    <div id="logged-in-message" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4">
-        <div class="bg-input-bg p-8 rounded-xl text-center shadow-2xl">
-            <h2 class="text-3xl font-bold text-primary-light mb-4">Bem-vindo(a)!</h2>
-            <p class="text-gray-300 mb-6">Login realizado com sucesso.</p>
-            <button id="logout-button" class="bg-red-600 hover:bg-red-700 p-2 px-4 rounded-lg font-semibold transition duration-200">
-                Sair
-            </button>
-        </div>
-    </div>
-
-    <script src="js/script.js"></script>
+    <!-- JavaScript externo -->
+    <script src="app.js"></script>
 </body>
 </html>

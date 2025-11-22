@@ -1,17 +1,48 @@
-input:focus {
-    outline: none !important;
-    border-color: #c084fc !important;
-    box-shadow: 0 0 0 1px #c084fc !important;
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #050505;
+    color: white;
 }
 
-.social-button {
-    @apply w-full flex items-center justify-center space-x-2 p-3 border border-gray-700 bg-black hover:bg-gray-900 rounded-lg transition duration-200 font-medium;
+.custom-input {
+    background-color: #1E1E1E;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+.custom-input:focus {
+    border-color: #D946EF;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(217, 70, 239, 0.2);
 }
 
-.input-field {
-    @apply w-full px-4 py-3 bg-input-bg border border-gray-700 rounded-lg text-white placeholder-gray-500 transition duration-200;
+.btn-primary {
+    background-color: #C026D3;
+    transition: background-color 0.2s;
+}
+.btn-primary:hover {
+    background-color: #A21CAF;
 }
 
-.login-button {
-    @apply w-full p-3 bg-primary-dark hover:bg-primary-dark/80 rounded-lg text-lg font-semibold shadow-lg shadow-primary-dark/40 transition duration-300 ease-in-out transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 focus:ring-offset-background-dark;
+.social-btn {
+    background-color: transparent;
+    border: 1px solid #333;
+    transition: background-color 0.2s;
+}
+.social-btn:hover {
+    background-color: #1E1E1E;
+}
+
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #C026D3;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
