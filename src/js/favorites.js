@@ -150,8 +150,18 @@ async function render() {
 }
 
 // Re-render sempre que o usuário digitar na busca.
-searchEl?.addEventListener('input', render);
+if (searchEl) {
+  searchEl.addEventListener('input', () => {
+    const term = searchEl.value.trim().toLowerCase();
 
+    const cards = listEl.querySelectorAll('.card');
+    cards.forEach(card => {
+      const name = (card.dataset.name || '').toLowerCase();
+      const matches = !term || name.includes(term);
+      card.style.display = matches ? '' : 'none';
+    });
+  });
+}
 // Remoção (desfavoritar):
 // - Uso delegação de evento no document para capturar cliques em .fav, inclusive em cards recém-renderizados.
 // - Quando clica, leio o data-id do card; tiro do Set; salvo no localStorage; chamo render() de novo.
