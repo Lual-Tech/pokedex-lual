@@ -1,13 +1,69 @@
-// ===== Catálogo mínimo para renderizar favoritos =====
-// Obs: isso aqui é um “mini-banco” só com os Pokémons que eu uso.
-// Cada item tem: id (chave), name (texto que aparece), img (SVG local) e bg (gradiente do card).
-const POKEDEX = {
-  jigglypuff: {id:'jigglypuff', name:'Jigglypuff', img:'../../public/img/jiggly.svg', bg:'var(--rosagrad)'},
-  bulbasaur:  {id:'bulbasaur',  name:'Bulbasaur',  img:'../../public/img/bulba.svg',    bg:'var(--verdegrad)'},
-  squirtle:   {id:'squirtle',   name:'Squirtle',   img:'../../public/img/squirtle.svg', bg:'var(--azulgrad)'},
-  charmander: {id:'charmander', name:'Charmander', img:'../../public/img/chari.svg',    bg:'var(--largrad)'},
-  sprigatito: {id:'sprigatito', name:'Sprigatito', img:'../../public/img/sprigatito.svg', bg:'var(--verdegrad)'}
-};
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+// ===== Cache simples de API (memória) =====
+window.apiCache = new Map();
+const apiCache = window.apiCache;
+
+
+async function loadPokemonApi(url) {
+  // se já tiver no cache, reutiliza
+  if (apiCache.has(url)) {
+    return apiCache.get(url);
+  }
+
+  // guarda a Promise no cache para evitar múltiplos fetchs simultâneos do mesmo recurso
+  const promise = (async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(error.message);
+      // se der erro, não deixa a entrada “quebrada” no cache
+      apiCache.delete(url);
+      throw error;
+    }
+  })();
+
+  apiCache.set(url, promise);
+  return promise;
+}
+
+
+async function createPokemonCard(pokemon_id) {
+  // detalhes do Pokémon (para pegar sprite)
+  const pokemonData = await loadPokemonApi(`https://pokeapi.co/api/v2/pokemon/${pokemon_id}/`);
+  if (!pokemonData) return null;
+
+  const pokemon_imagem =
+    pokemonData.sprites.other?.dream_world?.front_default ||
+    pokemonData.sprites.other?.['official-artwork']?.front_default ||
+    pokemonData.sprites.front_default;
+    const pokemon_name = capitalize(pokemonData.name);
+
+  const pokeDiv = document.createElement('div');
+  pokeDiv.classList.add('card');
+  // você pode trocar para pokemon_id se preferir usar o ID numérico nos favoritos
+  pokeDiv.dataset.id = pokemon_id;
+  pokeDiv.dataset.name = pokemon_name;
+
+  pokeDiv.innerHTML = `
+    <button class="fav" title="Favoritar" type="button">❤</button>
+    <div class="thumb" style="background:var(--verdegrad)">
+      <img alt="${pokemon_name}" src="${pokemon_imagem}">
+    </div>
+    <div class="meta">
+      <span>${pokemon_name}</span>
+      <span class="pill">➜</span>
+    </div>
+  `;
+
+  return pokeDiv;
+}
 
 // ===== localStorage: como estou salvando =====
 // - O localStorage é um "bloco de notas" do navegador, por domínio, que guarda pares chave/valor como string.
@@ -52,13 +108,12 @@ const searchEl = document.getElementById('q');
 // - Mapeia IDs -> objetos do POKEDEX (descarta IDs desconhecidos).
 // - Aplica filtro pelo termo de busca (client-side, instantâneo).
 // - Gera o HTML dos cards OU um “estado vazio” (call-to-action).
-function render() {
-  const favs = loadFavs();                                        // ex.: Set {'squirtle','bulbasaur'}
-  const items = [...favs].map(id => POKEDEX[id]).filter(Boolean); // resolve para objetos (e remove IDs inválidos)
-  const term = (searchEl?.value || '').trim().toLowerCase();      // termo normalizado
-
+async function render() {
+  const favs = [...loadFavs()];        
+  console.log(favs.length)                                // ex.: Set {'squirtle','bulbasaur'}
+  listEl.innerHTML = ''
   // Estado vazio: não há nada salvo no localStorage (ou o usuário removeu tudo).
-  if (!items.length) {
+  if (!favs.length) {
     listEl.innerHTML = `
       <div style="grid-column: 1/-1; display:grid; place-items:center; padding:42px 12px; opacity:.9">
         <div style="font-size:42px; margin-bottom:10px">⭐</div>
@@ -71,22 +126,27 @@ function render() {
       </div>`;
     return;
   }
+  else {
+    for (const pokemon of favs) {
+      const card =  await createPokemonCard(pokemon);
+      if (card) listEl.appendChild(card);
+    }  
+  }
+  // // Filtro local (não bate em rede): mostra só o que contém o termo no nome.
+  // const filtered = items.filter(p => !term || p.name.toLowerCase().includes(term));
 
-  // Filtro local (não bate em rede): mostra só o que contém o termo no nome.
-  const filtered = items.filter(p => !term || p.name.toLowerCase().includes(term));
-
-  // Se houver resultados, pinto; se não, aviso que nada bateu com o termo.
-  listEl.innerHTML = filtered.map(p => `
-    <div class="card" data-id="${p.id}">
-      <button class="fav" type="button" title="Desfavoritar">❤</button>
-      <div class="thumb" style="background:${p.bg}">
-        <img alt="${p.name}" src="${p.img}">
-      </div>
-      <div class="meta"><span>${p.name}</span><span class="pill">➜</span></div>
-    </div>
-  `).join('') || `
-    <p style="opacity:.8; margin:0 16px">Nenhum favorito encontrado para "${term}".</p>
-  `;
+  // // Se houver resultados, pinto; se não, aviso que nada bateu com o termo.
+  // listEl.innerHTML = filtered.map(p => `
+  //   <div class="card" data-id="${p.id}">
+  //     <button class="fav" type="button" title="Desfavoritar">❤</button>
+  //     <div class="thumb" style="background:${p.bg}">
+  //       <img alt="${p.name}" src="${p.img}">
+  //     </div>
+  //     <div class="meta"><span>${p.name}</span><span class="pill">➜</span></div>
+  //   </div>
+  // `).join('') || `
+  //   <p style="opacity:.8; margin:0 16px">Nenhum favorito encontrado para "${term}".</p>
+  // `;
 }
 
 // Re-render sempre que o usuário digitar na busca.
@@ -96,7 +156,7 @@ searchEl?.addEventListener('input', render);
 // - Uso delegação de evento no document para capturar cliques em .fav, inclusive em cards recém-renderizados.
 // - Quando clica, leio o data-id do card; tiro do Set; salvo no localStorage; chamo render() de novo.
 // - Isso garante que a UI esteja sempre em “modo verdade” do storage (fonte de dados).
-document.addEventListener('click', (e)=>{
+document.addEventListener('click', async (e)=>{
   const btn = e.target.closest('.fav');
   if(!btn) return;
   e.preventDefault(); e.stopPropagation();
@@ -104,11 +164,11 @@ document.addEventListener('click', (e)=>{
   const card = btn.closest('.card');
   const id = card?.dataset.id;
   if(!id) return;
-
+  console.log(id)
   const favs = loadFavs(); // pego o Set atual do storage
   favs.delete(id);         // removo o item clicado
   saveFavs(favs);          // persisto a nova versão (sincronizada com disco)
-  render();                // redesenho a tela com base no storage atualizado
+  await render();                // redesenho a tela com base no storage atualizado
 });
 
 // Primeira renderização da página (carrega o que já havia sido salvo anteriormente).

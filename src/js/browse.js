@@ -57,12 +57,12 @@ async function createPokemonCard(pokemon) {
     pokemonData.sprites.other?.['official-artwork']?.front_default ||
     pokemonData.sprites.front_default;
 
-  const pokemon_name = capitalize(pokemon.name);
+  const pokemon_name = capitalize(pokemon.name);''
 
   const pokeDiv = document.createElement('div');
   pokeDiv.classList.add('card');
   // você pode trocar para pokemon_id se preferir usar o ID numérico nos favoritos
-  pokeDiv.dataset.id = pokemon_name;
+  pokeDiv.dataset.id = pokemon_id;
   pokeDiv.dataset.name = pokemon_name;
 
   pokeDiv.innerHTML = `
