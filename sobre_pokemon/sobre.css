@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Fundo da Esquerda */
+.bg-squirtle-gradient {
+    background: radial-gradient(circle at 50% 30%, #c0f6fa 0%, #03a4e8 100%) !important;
+}
+
+/* Badges de Tipos */
+.grad-electric { 
+    background: radial-gradient(circle at top left, #FFD882, #CF8E00) !important; 
+    color: #222 !important;
+    border: 1px solid rgba(255,255,255,0.4);
+}
+.grad-grass { 
+    background: radial-gradient(circle at top left, #9efed0, #038e00) !important; 
+    color: #000 !important; 
+    border: 1px solid rgba(255,255,255,0.4);
+}
+.grad-fire { 
+    background: radial-gradient(circle at top left, #FDE9A9, #D53E1B) !important; 
+    color: #222 !important; 
+    border: 1px solid rgba(255,255,255,0.4);
+}
+.solid-ice { 
+    background: linear-gradient(135deg, #76BEFE, #4DA0E8) !important; 
+    color: #000 !important; 
+    border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Animações */
+@keyframes floatPokemon {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+.animate-float { animation: floatPokemon 5s ease-in-out infinite; }
+
+@keyframes slideUpFade {
+    from { opacity:0; transform:translateY(20px);}
+    to { opacity:1; transform:translateY(0);}
+}
+.animate-slide-up { animation: slideUpFade 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* Sombra */
+.shadow-realistic {
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+    width: 350px;
+    height: 40px;
+    margin-top: -30px;
+    z-index: 0;
+    filter: blur(5px);
+    opacity: 0.8;
+    animation: breatheShadow 5s ease-in-out infinite;
+}
+@keyframes breatheShadow {
+    0%,100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(0.8); opacity:0.5; }
+}
+
+.no-scrollbar::-webkit-scrollbar { display:none; }
+.no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+
+.tab-indicator {
+    position:absolute;
+    bottom:-2px;
+    left:0;
+    height:3px;
+    width:100%;
+    background:#5090D6;
+    box-shadow:0 -2px 10px rgba(80,144,214,0.8);
+    border-radius:4px 4px 0 0;
+    transform:scaleX(1);
+}
+
+.glass-dock {
+    background: rgba(30,30,30,0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border:1px solid rgba(255,255,255,0.1);
+}
