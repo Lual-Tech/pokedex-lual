@@ -1,22 +1,48 @@
-/* Configurações do Tailwind (cores e fontes) */
-@layer base {
-    body {
-        font-family: 'Inter', sans-serif;
+/* FORÇA TOTAL: fundo sempre preto */
+html, body {
+    background-color: #050505 !important;
+    background: #050505 !important;
+    color: #ffffff !important;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.custom-input {
+    background-color: #121212 !important; 
+    border: 1px solid #27272a !important; 
+    color: white !important;
+    transition: all 0.2s ease;
+}
+
+.custom-input:focus {
+    border-color: #d946ef !important;
+    outline: none;
+    box-shadow: 0 0 0 1px #d946ef;
+}
+
+.custom-input::placeholder { 
+    color: #71717a; 
+}
+
+.fade-enter {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
     }
 }
 
-/* Foco nos inputs */
-input:focus {
-    outline: none !important;
-    border-color: #c084fc !important;
-    box-shadow: 0 0 0 1px #c084fc !important;
-}
-
-/* Cores personalizadas para Tailwind */
-:root {
-    --primary-dark: #8e24aa;
-    --primary-light: #c084fc;
-    --background-dark: #000000;
-    --card-dark: #000000;
-    --input-bg: #1f1f1f;
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
 }
