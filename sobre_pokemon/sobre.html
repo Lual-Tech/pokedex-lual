@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Fullscreen Final</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#121212] text-white h-screen w-screen overflow-hidden flex flex-col items-center justify-center p-4 gap-4">
+
+    <div class="w-full max-w-[95%] relative z-40">
+        <form id="search-form" class="flex gap-3 shadow-2xl" onsubmit="handleSearch(event)">
+            <input type="text" id="search-input" placeholder="Buscar Pokémon..." 
+                class="w-full bg-[#1E1E1E] border border-gray-800 text-white text-lg px-8 py-4 rounded-2xl focus:outline-none focus:border-blue-500 transition shadow-lg placeholder-gray-600">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 rounded-2xl transition duration-300 flex items-center justify-center shadow-lg active:scale-95">
+                <i data-lucide="search" class="w-8 h-8"></i>
+            </button>
+        </form>
+    </div>
+
+    <main class="w-[95%] h-[85vh] bg-[#1E1E1E] rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row relative border border-gray-800">
+        
+        <div id="loading-overlay" class="absolute inset-0 z-50 bg-[#1E1E1E] flex flex-col items-center justify-center transition-opacity duration-300">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-700 h-16 w-16 mb-4 text-blue-500"></div>
+            <span class="text-gray-400 text-lg animate-pulse">Carregando dados...</span>
+        </div>
+
+        <div id="error-state" class="absolute inset-0 z-40 bg-[#1E1E1E] flex flex-col items-center justify-center hidden text-center p-8">
+            <i data-lucide="alert-circle" class="w-24 h-24 text-red-500 mb-6"></i>
+            <h2 class="text-4xl font-bold mb-4">Pokémon não encontrado</h2>
+            <button onclick="loadPokemon(1)" class="px-8 py-4 bg-gray-700 rounded-xl hover:bg-gray-600 transition text-lg">Voltar para o Início</button>
+        </div>
+
+        <section class="relative w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-between bg-[#1E1E1E] z-10 border-r border-gray-800">
+            
+            <header class="flex justify-between items-center z-20">
+                <button onclick="changePokemon(-1)" class="p-4 bg-white/5 rounded-full hover:bg-white/10 transition active:scale-90">
+                    <i data-lucide="arrow-left" class="w-8 h-8 text-white"></i>
+                </button>
+                
+                <div class="flex flex-col items-center mx-4 flex-1 truncate">
+                        <h1 id="poke-name" class="text-3xl md:text-5xl lg:text-6xl font-bold capitalize tracking-wide text-white drop-shadow-lg text-center leading-tight truncate">Loading</h1>
+                        <span id="poke-id" class="text-gray-500 text-xl font-bold tracking-[0.2em] mt-2">#0000</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button id="btn-favorite" class="p-4 bg-white/5 rounded-full hover:bg-white/10 transition shadow-lg active:scale-90 group" title="Favoritar">
+                        <i id="icon-heart" data-lucide="heart" class="w-8 h-8 text-white group-hover:text-red-500 transition"></i>
+                    </button>
+                    <button onclick="changePokemon(1)" class="p-4 bg-white/5 rounded-full hover:bg-white/10 transition active:scale-90">
+                        <i data-lucide="arrow-right" class="w-8 h-8 text-white"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 flex flex-col items-center justify-center relative my-4">
+                <div id="poke-bg-circle" class="absolute w-[400px] h-[400px] rounded-full blur-[80px] opacity-30 transition-colors duration-500 bg-blue-500"></div>
+                <img id="poke-image" src="" alt="" class="w-[350px] h-[350px] md:w-[450px] md:h-[450px] object-contain z-20 drop-shadow-2xl transition-transform hover:scale-105 duration-300 cursor-pointer" onclick="playSound()">
+            </div>
+            
+            </section>
+
+        <section class="w-full md:w-1/2 bg-[#121212] p-8 md:p-12 flex flex-col z-30">
+            <nav class="flex justify-between mb-10 border-b border-gray-800">
+                <button onclick="switchTab('sobre')" id="tab-sobre" class="tab-active pb-4 text-lg font-semibold tracking-wider w-1/3 hover:text-white transition">SOBRE</button>
+                <button onclick="switchTab('status')" id="tab-status" class="tab-inactive pb-4 text-lg font-semibold tracking-wider w-1/3 hover:text-white transition">STATUS</button>
+                <button onclick="switchTab('habilidades')" id="tab-habilidades" class="tab-inactive pb-4 text-lg font-semibold tracking-wider w-1/3 hover:text-white transition">SKILLS</button>
+            </nav>
+
+            <div id="content-area" class="flex-1 overflow-y-auto hide-scrollbar pr-2">
+                <article id="view-sobre" class="animate-fade-in space-y-8">
+                    <div class="grid grid-cols-2 gap-6 bg-[#1E1E1E] p-8 rounded-3xl border border-gray-800">
+                        <div class="flex flex-col gap-2">
+                            <span class="text-gray-500 text-xs uppercase font-bold tracking-widest">Tipos</span>
+                            <div id="types-container" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-gray-500 text-xs uppercase font-bold tracking-widest">Habilidade</span>
+                            <span id="poke-main-ability" class="text-lg capitalize font-medium text-gray-200">-</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-gray-500 text-xs uppercase font-bold tracking-widest">Altura</span>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="ruler" class="w-5 h-5 text-gray-500"></i>
+                                <span id="poke-height" class="text-lg font-medium text-gray-200">-</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <span class="text-gray-500 text-xs uppercase font-bold tracking-widest">Peso</span>
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="weight" class="w-5 h-5 text-gray-500"></i>
+                                <span id="poke-weight" class="text-lg font-medium text-gray-200">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest pl-3 border-l-4 border-red-500">Fraquezas</h3>
+                        <div id="weakness-container" class="flex flex-wrap gap-3"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest pl-3 border-l-4 border-green-500">Resistências</h3>
+                        <div id="resistance-container" class="flex flex-wrap gap-3"></div>
+                    </div>
+                </article>
+                <article id="view-status" class="hidden space-y-6">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Estatísticas de Batalha</h3>
+                    <div id="stats-container" class="space-y-6"></div>
+                </article>
+                <article id="view-habilidades" class="hidden space-y-4">
+                    <div id="abilities-list" class="space-y-4"></div>
+                </article>
+            </div>
+
+            <nav class="mt-6 pt-6 border-t border-gray-800 flex justify-around items-end">
+                <button class="flex flex-col items-center gap-2 group w-1/3" onclick="checkFavorites()">
+                    <div class="p-2 rounded-xl group-hover:bg-gray-800 transition">
+                        <i data-lucide="heart" class="w-6 h-6 text-gray-600 group-hover:text-red-500 transition"></i>
+                    </div>
+                    <span class="text-[10px] text-gray-600 group-hover:text-white uppercase tracking-widest font-bold">Favoritos</span>
+                </button>
+                <div class="relative -top-8 w-1/3 flex justify-center">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-xl border-[6px] border-[#121212] cursor-pointer hover:bg-blue-500 transition transform hover:scale-110 active:scale-95" onclick="loadPokemon(currentPokemonId)">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" class="w-10 h-10 invert opacity-90" alt="Refresh">
+                    </div>
+                </div>
+                <button class="flex flex-col items-center gap-2 group w-1/3" onclick="openProfile()">
+                    <div class="p-2 rounded-xl group-hover:bg-gray-800 transition">
+                         <i data-lucide="user" class="w-6 h-6 text-gray-600 group-hover:text-blue-400 transition"></i>
+                    </div>
+                    <span class="text-[10px] text-gray-600 group-hover:text-white uppercase tracking-widest font-bold">Perfil</span>
+                </button>
+            </nav>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

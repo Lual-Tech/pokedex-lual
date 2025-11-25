@@ -1,0 +1,30 @@
+/* FORÇA BRUTA: Reseta tudo para preto */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #121212 !important; /* Preto absoluto */
+    overflow: hidden; /* Remove rolagem da página inteira */
+}
+
+* { font-family: 'Poppins', sans-serif !important; }
+
+/* Esconde scrollbar interna */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.loader { 
+    border-top-color: currentColor; 
+    -webkit-animation: spinner 1.5s linear infinite; 
+    animation: spinner 1.5s linear infinite; 
+}
+
+@keyframes spinner { 
+    0% { transform: rotate(0deg); } 
+    100% { transform: rotate(360deg); } 
+}
+
+.tab-active { color: #ffffff; border-bottom: 2px solid #ffffff; }
+.tab-inactive { color: #6B7280; border-bottom: 2px solid transparent; }
+.stat-bar-fill { transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
