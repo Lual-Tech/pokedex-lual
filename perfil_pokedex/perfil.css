@@ -1,18 +1,67 @@
-.profile-banner {
-    background: linear-gradient(180deg, #8e24aa 0%, #333333 100%);
-    height: 200px;
+/* RESET TOTAL PARA FUNDO PRETO */
+html, body {
+    background-color: #050505 !important;
+    color: white !important;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* MÁSCARA PARA OS POKÉMONS */
+.pokemon-silhouette {
+    background-color: #FF85EA; 
+    -webkit-mask-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png');
+    mask-image: url('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/151.png');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    opacity: 0.5; 
+}
+
+/* ONDA (WAVE) NO RODAPÉ DO HEADER */
+.wave-container {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.wave-container svg {
     position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 80px;
 }
 
-.profile-card {
-    max-width: 800px;
-    margin-top: -80px; 
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+.wave-container .shape-fill {
+    fill: #050505;
 }
 
-.mew-icon { opacity: 0.15; width: 120px; height: 120px; position: absolute; top: 10px; }
-.mew-icon.left { left: 5%; transform: scaleX(-1); }
-.mew-icon.right { right: 5%; }
+/* Barra de Progresso */
+.progress-track {
+    background: #27272A;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+}
 
-.tab.active { border-color: #c084fc; background-color: #1f1f1f; }
+.progress-fill {
+    background: linear-gradient(90deg, #AD299B 0%, #E879F9 100%);
+    height: 100%;
+    width: 45%;
+    border-radius: 999px;
+}
+
+/* Animação */
+.fade-in { animation: fadeIn 0.6s ease-out forwards; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
