@@ -1,141 +1,125 @@
-const appState = {
-    isLoading: false,
-    currentUser: null,
-    error: null
-};
+const AppState = { mode: 'login' };
 
-const StorageService = {
-    KEY_USERS: 'app_users',
-    KEY_SESSION: 'app_current_session',
+// Elementos
+const form = document.getElementById('auth-form');
+const pageTitle = document.getElementById('page-title');
+const toggleBtn = document.getElementById('toggle-mode-btn');
+const footerText = document.getElementById('footer-text');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const submitBtn = document.getElementById('submit-btn');
+const notifArea = document.getElementById('notification-area');
 
-    initMockData: function () {
-        const users = this.getUsers();
-        if (users.length === 0) {
-            const mockUser = {
-                id: 1,
-                email: 'usuario@gmail.com',
-                password: '123456',
-                name: 'Treinador Pokémon'
-            };
-            this.saveUser(mockUser);
-            console.log('Usuário de teste criado: usuario@gmail.com / 123456');
-        }
-    },
-
-    getUsers: function () {
-        const data = localStorage.getItem(this.KEY_USERS);
-        return data ? JSON.parse(data) : [];
-    },
-
-    saveUser: function (user) {
-        const users = this.getUsers();
-        users.push(user);
-        localStorage.setItem(this.KEY_USERS, JSON.stringify(users));
-    },
-
-    authenticate: function (email, password) {
-        const users = this.getUsers();
-        const user = users.find(
-            u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-        );
-
-        if (user) {
-            localStorage.setItem(
-                this.KEY_SESSION,
-                JSON.stringify({
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    loginTime: new Date().toISOString()
-                })
-            );
-            return user;
-        }
-        return null;
-    }
-};
-
-const DOM = {
-    form: document.getElementById('loginForm'),
-    emailInput: document.getElementById('email'),
-    passInput: document.getElementById('password'),
-    submitBtn: document.getElementById('submitBtn'),
-    btnLoader: document.getElementById('btnLoader'),
-    btnText: document.querySelector('#submitBtn span'),
-    feedback: document.getElementById('feedbackMessage'),
-
-    setLoading: function (loading) {
-        appState.isLoading = loading;
-        if (loading) {
-            this.btnText.style.display = 'none';
-            this.btnLoader.style.display = 'block';
-            this.submitBtn.disabled = true;
-            this.submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-        } else {
-            this.btnText.style.display = 'block';
-            this.btnLoader.style.display = 'none';
-            this.submitBtn.disabled = false;
-            this.submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-        }
-    },
-
-    showFeedback: function (message, type) {
-        this.feedback.textContent = message;
-        this.feedback.classList.remove('hidden', 'bg-red-500/20', 'text-red-400', 'bg-green-500/20', 'text-green-400');
-
-        if (type === 'error') {
-            this.feedback.classList.add('bg-red-500/20', 'text-red-400', 'block');
-        } else {
-            this.feedback.classList.add('bg-green-500/20', 'text-green-400', 'block');
-        }
-    },
-
-    clearFeedback: function () {
-        this.feedback.classList.add('hidden');
-    }
-};
-
-function init() {
-    StorageService.initMockData();
-
-    DOM.form.addEventListener('submit', handleLoginSubmit);
-
-    DOM.emailInput.addEventListener('input', () => DOM.clearFeedback());
-    DOM.passInput.addEventListener('input', () => DOM.clearFeedback());
+// Notificação Toast
+function showToast(msg, type = 'success') {
+    const toast = document.createElement('div');
+    const bg = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
+    const icon = type === 'success' ? 'ph-check-circle' : 'ph-warning-circle';
+    
+    toast.className = `${bg} text-white px-4 py-3 rounded-lg shadow-xl flex items-center gap-3 min-w-[300px] transform translate-x-full transition-all duration-300`;
+    toast.innerHTML = `<i class="ph-bold ${icon} text-xl"></i><span class="text-sm font-medium">${msg}</span>`;
+    
+    notifArea.appendChild(toast);
+    
+    requestAnimationFrame(() => toast.classList.remove('translate-x-full'));
+    
+    setTimeout(() => {
+        toast.classList.add('translate-x-full', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
-async function handleLoginSubmit(event) {
-    event.preventDefault();
+// Alternar Login / Cadastro
+function toggleMode() {
+    form.reset();
+    const isLogin = AppState.mode === 'login';
+    
+    const container = document.getElementById('auth-container');
+    container.classList.remove('fade-enter');
+    void container.offsetWidth; 
+    container.classList.add('fade-enter');
 
-    const email = DOM.emailInput.value.trim();
-    const password = DOM.passInput.value.trim();
+    if (isLogin) {
+        AppState.mode = 'register';
+        pageTitle.innerText = "Crie sua conta";
+        submitBtn.innerText = "Criar conta";
+        footerText.innerText = "Já tem uma conta?";
+        toggleBtn.innerText = "Faça login";
+        emailInput.placeholder = "exemplo@email.com";
+    } else {
+        AppState.mode = 'login';
+        pageTitle.innerText = "Faça login para continuar";
+        submitBtn.innerText = "Entrar";
+        footerText.innerText = "Não possui uma conta?";
+        toggleBtn.innerText = "Cadastre-se agora";
+        emailInput.placeholder = "Usuario@gmail.com";
+    }
+}
 
-    if (!email || !password) {
-        DOM.showFeedback('Por favor, preencha todos os campos.', 'error');
+toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleMode();
+});
+
+// Submit
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    const pwd = passwordInput.value.trim();
+
+    if (!email || !pwd) {
+        showToast("Preencha todos os campos", "error");
         return;
     }
 
-    DOM.setLoading(true);
-    DOM.clearFeedback();
-
+    const originalText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-xl"></i>`;
+    
     setTimeout(() => {
-        try {
-            const user = StorageService.authenticate(email, password);
-
-            if (user) {
-                appState.currentUser = user;
-                DOM.showFeedback(`Bem-vindo de volta, ${user.name}! Redirecionando...`, 'success');
-                console.log("Login efetuado com sucesso:", user);
+        const users = JSON.parse(localStorage.getItem('users_db')) || [];
+        
+        if (AppState.mode === 'register') {
+            if (users.find(u => u.email === email)) {
+                showToast("Este e-mail já está cadastrado", "error");
             } else {
-                throw new Error('E-mail ou senha incorretos.');
+                users.push({ email, pwd, id: Date.now() });
+                localStorage.setItem('users_db', JSON.stringify(users));
+                showToast("Conta criada! Faça login.");
+                toggleMode();
             }
-        } catch (error) {
-            appState.error = error.message;
-            DOM.showFeedback(error.message, 'error');
-        } finally {
-            DOM.setLoading(false);
+        } else {
+            const user = users.find(u => u.email === email && u.pwd === pwd);
+            if (user) {
+                showToast("Login realizado com sucesso!");
+                localStorage.setItem('session', JSON.stringify({ user: user.email }));
+                
+                document.body.innerHTML = `
+                    <div class="h-screen w-screen flex flex-col items-center justify-center text-white fade-enter" style="background-color: #050505;">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(34,197,94,0.4)]">
+                            <i class="ph-bold ph-check text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold">Bem-vindo de volta!</h2>
+                        <p class="text-gray-400 mt-2">${email}</p>
+                        <button onclick="location.reload()" class="mt-8 text-sm text-gray-500 hover:text-white">Sair</button>
+                    </div>
+                `;
+            } else {
+                showToast("E-mail ou senha incorretos", "error");
+            }
         }
-    }, 1500);
-}
+        
+        if (document.getElementById('submit-btn')) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
+    }, 1000);
+});
 
-document.addEventListener('DOMContentLoaded', init);
+// Recupera último email digitado
+const lastEmail = localStorage.getItem('last_email');
+if (lastEmail) emailInput.value = lastEmail;
+
+emailInput.addEventListener('blur', () => {
+    if (emailInput.value) localStorage.setItem('last_email', emailInput.value);
+});
