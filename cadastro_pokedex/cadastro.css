@@ -1,50 +1,48 @@
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #050505;
-    color: white;
+/* FORÇA TOTAL: fundo sempre preto */
+html, body {
+    background-color: #050505 !important;
+    background: #050505 !important;
+    color: #ffffff !important;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 .custom-input {
-    background-color: #1E1E1E;
-    border: 1px solid #333;
-    transition: all 0.3s ease;
+    background-color: #121212 !important; 
+    border: 1px solid #27272a !important; 
+    color: white !important;
+    transition: all 0.2s ease;
 }
 
 .custom-input:focus {
-    border-color: #D946EF;
+    border-color: #d946ef !important;
     outline: none;
-    box-shadow: 0 0 0 2px rgba(217, 70, 239, 0.2);
+    box-shadow: 0 0 0 1px #d946ef;
 }
 
-.btn-primary {
-    background-color: #C026D3;
-    transition: background-color 0.2s;
+.custom-input::placeholder { 
+    color: #71717a; 
 }
 
-.btn-primary:hover {
-    background-color: #A21CAF;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
+.fade-enter {
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-.loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #C026D3;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-    display: none;
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
 }

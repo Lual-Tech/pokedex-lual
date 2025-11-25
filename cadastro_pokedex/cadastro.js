@@ -1,108 +1,84 @@
-const StorageService = {
-    KEY_USERS: 'app_users',
-
-    getUsers: function() {
-        const data = localStorage.getItem(this.KEY_USERS);
-        return data ? JSON.parse(data) : [];
-    },
-
-    saveUser: function(newUser) {
-        const users = this.getUsers();
-        if (users.some(u => u.email.toLowerCase() === newUser.email.toLowerCase())) {
-            throw new Error('Este e-mail já está cadastrado.');
-        }
-
-        newUser.id = Date.now();
-        users.push(newUser);
-        localStorage.setItem(this.KEY_USERS, JSON.stringify(users));
-        return newUser;
-    }
-};
-
-const phoneInput = document.getElementById('phone');
-phoneInput.addEventListener('input', function (e) {
-    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
-    e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-});
-
-const form = document.getElementById('registerForm');
-const feedback = document.getElementById('feedbackMessage');
-const btnLoader = document.getElementById('btnLoader');
-const submitBtn = document.getElementById('submitBtn');
-const btnText = document.querySelector('#submitBtn span');
-
-function showFeedback(message, type) {
-    feedback.textContent = message;
-    feedback.className = `p-3 rounded text-sm text-center block ${type === 'error'
-        ? 'bg-red-500/20 text-red-400'
-        : 'bg-green-500/20 text-green-400'}`;
+// --- MÁSCARA DE TELEFONE ---
+window.phoneMask = function(input) {
+    let value = input.value.replace(/\D/g,'');
+    value = value.replace(/^(\d{2})(\d)/g,"($1) $2");
+    value = value.replace(/(\d)(\d{4})$/,"$1-$2");
+    input.value = value;
 }
 
-function setLoading(isLoading) {
-    if (isLoading) {
-        btnText.style.display = 'none';
-        btnLoader.style.display = 'block';
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-    } else {
-        btnText.style.display = 'block';
-        btnLoader.style.display = 'none';
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-    }
-}
+// --- LÓGICA DE CADASTRO ---
+const form = document.getElementById('register-form');
+const submitBtn = document.getElementById('submit-btn');
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const formData = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        password: document.getElementById('password').value,
-        confirmPassword: document.getElementById('confirmPassword').value
-    };
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
 
-    if (!formData.name || !formData.email || !formData.password) {
-        showFeedback('Preencha todos os campos obrigatórios.', 'error');
+    if (password !== confirmPassword) {
+        showToast("As senhas não coincidem", "error");
         return;
     }
 
-    if (formData.password !== formData.confirmPassword) {
-        showFeedback('As senhas não coincidem.', 'error');
-        return;
-    }
-
-    if (formData.password.length < 6) {
-        showFeedback('A senha deve ter pelo menos 6 caracteres.', 'error');
-        return;
-    }
-
-    setLoading(true);
-    feedback.classList.add('hidden');
+    const originalText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="ph-bold ph-spinner animate-spin text-xl"></i>`;
 
     setTimeout(() => {
-        try {
-            const userToSave = {
-                name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                password: formData.password
+        const users = JSON.parse(localStorage.getItem('users_db')) || [];
+
+        if (users.find(u => u.email === email)) {
+            showToast("Este e-mail já está em uso", "error");
+            resetButton(originalText);
+        } else {
+            const newUser = {
+                id: Date.now(),
+                name,
+                email,
+                phone,
+                password 
             };
+            
+            users.push(newUser);
+            localStorage.setItem('users_db', JSON.stringify(users));
+            
+            showToast("Usuário cadastrado com sucesso!");
 
-            StorageService.saveUser(userToSave);
-
-            showFeedback('Conta criada com sucesso! Redirecionando para o login...', 'success');
-            form.reset();
-
-            setTimeout(() => {
-                console.log("Redirecionando para login...");
-            }, 2000);
-
-        } catch (error) {
-            showFeedback(error.message, 'error');
-        } finally {
-            setLoading(false);
+            document.body.innerHTML = `
+                <div class="fixed inset-0 w-full h-full flex flex-col items-center justify-center text-white fade-enter" style="background-color: #050505; z-index: 9999;">
+                    <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+                        <i class="ph-bold ph-check text-4xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold">Conta Criada!</h2>
+                    <p class="text-gray-400 mt-2">O usuário <span class="text-white">${name}</span> foi registrado.</p>
+                    <button onclick="location.reload()" class="mt-8 text-sm text-gray-500 hover:text-white underline">Cadastrar outro</button>
+                </div>
+            `;
         }
-    }, 1500);
+    }, 1000);
 });
+
+function resetButton(text) {
+    submitBtn.disabled = false;
+    submitBtn.innerText = text;
+}
+
+// --- TOAST ---
+function showToast(msg, type = 'success') {
+    const area = document.getElementById('notification-area');
+    const toast = document.createElement('div');
+    const bg = type === 'success' ? 'bg-emerald-600' : 'bg-red-600';
+    
+    toast.className = `${bg} text-white px-4 py-3 rounded-lg shadow-xl flex items-center gap-3 min-w-[300px] animate-[slideIn_0.3s_ease-out]`;
+    toast.innerHTML = `<i class="ph-bold ${type === 'success'?'ph-check-circle':'ph-warning-circle'} text-xl"></i><span class="text-sm font-medium">${msg}</span>`;
+    
+    area.appendChild(toast);
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-x-full', 'transition-all', 'duration-300');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
