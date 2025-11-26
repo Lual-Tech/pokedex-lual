@@ -1,0 +1,24 @@
+/* Configuração Global de Fonte */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* CSS Específico para a curva do perfil */
+.header-curve {
+    background: linear-gradient(to bottom, #9d174d, #831843); /* Degradê Rosa/Roxo */
+    border-bottom-left-radius: 50% 20%;
+    border-bottom-right-radius: 50% 20%;
+    position: relative;
+    overflow: visible; /* Permite que o avatar e elementos vazem para fora */
+}
+
+/* Animação do Mew flutuando */
+.mew-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
