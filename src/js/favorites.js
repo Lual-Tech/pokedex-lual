@@ -62,6 +62,9 @@ async function createPokemonCard(pokemon_id) {
     </div>
   `;
 
+  pokeDiv.addEventListener('click',()=>{
+    window.location =  `/sobre_pokemon/sobre.html?id=${pokemon_id}`
+  })
   return pokeDiv;
 }
 

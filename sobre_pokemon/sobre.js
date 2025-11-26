@@ -1,5 +1,5 @@
 let currentPokemonId = 1;
-const STORAGE_KEY = 'pokedex_favorites_v2';
+const STORAGE_KEY = 'pokedex:favs';
 
 const typeColors = { normal:'#A8A77A', fire:'#EE8130', water:'#6390F0', electric:'#F7D02C', grass:'#7AC74C', ice:'#96D9D6', fighting:'#C22E28', poison:'#A33EA1', ground:'#E2BF65', flying:'#A98FF3', psychic:'#F95587', bug:'#A6B91A', rock:'#B6A136', ghost:'#735797', dragon:'#6F35FC', dark:'#705746', steel:'#B7B7CE', fairy:'#D685AD' };
 const typeTranslation = { normal:'Normal', fire:'Fogo', water:'Água', electric:'Elétrico', grass:'Planta', ice:'Gelo', fighting:'Luta', poison:'Veneno', ground:'Terra', flying:'Voador', psychic:'Psíquico', bug:'Inseto', rock:'Pedra', ghost:'Fantasma', dragon:'Dragão', dark:'Sombrio', steel:'Aço', fairy:'Fada' };
@@ -7,6 +7,12 @@ const statsTranslation = { hp:'HP', attack:'ATQ', defense:'DEF', 'special-attack
 
 lucide.createIcons();
 document.addEventListener('DOMContentLoaded', () => { 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString); 
+    currentPokemonId = urlParams.get('id'); 
+    if(!currentPokemonId){
+        currentPokemonId = 1;
+    }
     loadPokemon(currentPokemonId); 
     updateFavoriteButtonUI(); 
     document.getElementById('btn-favorite').addEventListener('click', toggleFavorite); 

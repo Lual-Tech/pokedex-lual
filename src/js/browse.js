@@ -66,7 +66,6 @@ async function createPokemonCard(pokemon) {
   pokeDiv.dataset.name = pokemon_name;
 
   pokeDiv.innerHTML = `
-    <button class="fav" title="Favoritar" type="button">❤</button>
     <div class="thumb" style="background:var(--verdegrad)">
       <img alt="${pokemon_name}" src="${pokemon_imagem}">
     </div>
@@ -75,6 +74,10 @@ async function createPokemonCard(pokemon) {
       <span class="pill">➜</span>
     </div>
   `;
+
+  pokeDiv.addEventListener('click', () => {
+    window.location = `/sobre_pokemon/sobre.html?id=${pokemon_id}`
+  })
 
   return pokeDiv;
 }
@@ -119,7 +122,7 @@ async function loadPokemonsPage() {
   }
 
   // depois de criar os cards desta página:
-  syncAllHearts();      // aplica estado de favoritos
+  syncHeart();      // aplica estado de favoritos
   applyCurrentFilter(); // respeita o termo de busca atual
 
   nextOffset += pokemons.results.length;
@@ -184,7 +187,7 @@ if (q) {
 // ===== Favoritos =====
 const favSet = loadFavs();
 
-function syncAllHearts() {
+function syncHeart() {
   const allCards = document.querySelectorAll('#cards .card');
   allCards.forEach(c => {
     const id = c.dataset.id;
@@ -195,7 +198,7 @@ function syncAllHearts() {
 }
 
 // chamada inicial (se já existirem cards na tela)
-syncAllHearts();
+syncHeart();
 
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.fav');
