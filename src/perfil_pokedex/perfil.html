@@ -22,7 +22,6 @@
     </script>
 
     <style>
-        /* AJUSTE 1: Cor exata que você pediu (#d946ef) */
         .header-curve {
             background: #d946ef; 
             border-bottom-left-radius: 50% 20%;
@@ -91,13 +90,13 @@
         </div>
 
         <div class="w-full space-y-2 mb-8">
-            <button class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition group border border-transparent hover:border-white/10">
+            <a href="/src/favoritados/favorites.html" class="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition group border border-transparent hover:border-white/10 decoration-transparent">
                 <div class="p-2 bg-white/5 rounded-lg text-gray-400 group-hover:text-red-500 group-hover:bg-red-500/10 transition">
                     <i data-lucide="heart" class="w-6 h-6"></i>
                 </div>
                 <span class="text-lg font-medium text-gray-200 group-hover:text-white">Pokémons Favoritos</span>
                 <i data-lucide="chevron-right" class="w-5 h-5 ml-auto text-gray-600 group-hover:text-white transition"></i>
-            </button>
+            </a>
         </div>
 
         <div class="w-full h-px bg-gray-800 mb-8"></div>
@@ -136,6 +135,7 @@
     </main>
 
     <script>
+        // Inicializa os ícones
         lucide.createIcons();
     </script>
 </body>
