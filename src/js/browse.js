@@ -61,7 +61,6 @@ async function createPokemonCard(pokemon) {
 
   const pokeDiv = document.createElement('div');
   pokeDiv.classList.add('card');
-  // você pode trocar para pokemon_id se preferir usar o ID numérico nos favoritos
   pokeDiv.dataset.id = pokemon_id;
   pokeDiv.dataset.name = pokemon_name;
 
